@@ -156,9 +156,9 @@ function Header(props) {
             <i className="material-icons">menu</i>
           </button>
           {/* <!-- Navbar brand--> */}
-          <a className="navbar-brand me-auto" href="/">
+          <Link className="navbar-brand me-auto" to="/">
             <div className="text-uppercase font-monospace">CommerCY</div>
-          </a>
+          </Link>
           {/* <!-- Navbar items--> */}
           <div className="d-flex align-items-center mx-3 me-lg-0">
             {/* <!-- Navbar--> */}
