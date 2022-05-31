@@ -50,8 +50,9 @@ app.use(cookieParser());
 // app.use("/assets",express.static(path.join(__dirname, 'public','assets')))
 app.use("/assets",expressStaticGzip(path.join(__dirname, 'public','assets'),{
   urlContains: "/assets",
-  fallthrough: false,
-  enableBrotli: true,
+  orderPreference:['br','gz'],
+  enableBrotli: true
+  // enableBrotli: true,
 }))
 
 
