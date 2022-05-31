@@ -1,17 +1,57 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+import "./index.css";
+import RouterFs from "./RouterFs";
+import axios from "axios";
+import {Provider} from "react-redux"
+import {combineReducers, createStore} from "redux";
+import {ContractReducers,CartReducers,NotifReducers,BalanceReducers} from "./utils/reducer"
+import "bootstrap/dist/js/bootstrap.js"
+
+
+// state.updateData({id:3,name:"oscar",username:"admin",password:"admin001",saldo:100});
+//   state.updateSessionTime(new Date())
+// if(window.__state && window.__state.isLogin){
+//   state.updateData(window.__state.data);
+//   state.updateSessionTime(new Date())
+// }
+axios.defaults.baseURL="http://localhost:8000/api"
+
+
+// ConnectBlockchain(isLogin).then(async contract=>{
+  const reducer= combineReducers({ContractReducers,CartReducers,NotifReducers,BalanceReducers})
+  
+  const store = createStore(reducer)
+//   const state= store.getState()
+//   if(isLogin){
+//     console.log(isLogin)
+
+    // const accountBalance = await contract.provider.getBalance(contract.wallet)
+    // const balance = ethers.utils.formatEther(accountBalance.toString())
+    // state.BalanceReducers = balance;
+//   }
+//   state.ContractReducers.setContract(contract);
+  
+  // try {
+  //   const exchangeInfo= await axios.get("https://api.binance.com/api/v1/ticker/24hr?symbol=BNBBIDR")
+  
+  //   state.ContractReducers.setPrice(4351650)
+  // state.ContractReducers.setPrice(parseInt(exchangeInfo.data.lastPrice))
+  ReactDOM.render(
+    <Provider store={store}>
+      <BrowserRouter>
+        <RouterFs />
+      </BrowserRouter>
+      </Provider>,
+    document.getElementById("root")
+  );
+//   } catch (error) {
+//     console.log(error)
+//   }
+  
+// }).catch(err=>{
+//   console.log(err)
+// })
+
