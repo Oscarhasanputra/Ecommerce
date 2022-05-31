@@ -47,12 +47,12 @@ app.use(cookieParser());
 // };
 
 // app.get("/assets/js/*.js.gz", encodeResToGzip('text/javascript'));
-// app.use("/assets",express.static(path.join(__dirname, 'public','assets')))
-app.use("/assets",expressStaticGzip(path.join(__dirname, 'public','assets'),{
-  urlContains: "/assets",
-  fallthrough: false,
-  enableBrotli: true,
-}))
+app.use("/assets",express.static(path.join(__dirname, 'public','assets')))
+// app.use("/assets",expressStaticGzip(path.join(__dirname, 'public','assets'),{
+//   urlContains: "/assets",
+//   fallthrough: false,
+//   enableBrotli: true,
+// }))
 
 
 app.use("/api",apiRouter)
