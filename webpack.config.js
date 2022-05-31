@@ -4,6 +4,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
+var BrotliPlugin = require('brotli-webpack-plugin');
 var browserConfig = {
   entry: "./src/index.js",
 
@@ -45,7 +46,8 @@ var browserConfig = {
       React: "react",
     }),
     new CleanWebpackPlugin(),
-    new CompressionPlugin()
+    new CompressionPlugin(),
+    new BrotliPlugin()
   ],
   optimization: {
     concatenateModules: true,

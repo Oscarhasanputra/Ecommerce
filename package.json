@@ -72,6 +72,7 @@
     "@babel/preset-react": "^7.16.5",
     "babel-loader": "8.1.0",
     "babel-plugin-css-modules-transform": "^1.6.2",
+    "brotli-webpack-plugin": "^1.1.0",
     "clean-webpack-plugin": "^4.0.0",
     "compression-webpack-plugin": "^6.1.1",
     "css-loader": "^5.2.7",
