@@ -64,7 +64,7 @@ export const ConnectBlockchain = (bool) =>
     } else {
       const networkID = 97;
       const connection = {
-        url: "http://34.101.162.9:2100/",
+        url: "http://34.101.162.9:8080/",
         headers: {
           // "externalURL": "https://data-seed-prebsc-1-s1.binance.org:8545/",
           // "X-Forwarded-For": "203.0.113.195 , localhost:8080"
