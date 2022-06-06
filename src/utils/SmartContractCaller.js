@@ -26,8 +26,8 @@ export const ConnectBlockchain = (bool) =>
             params: [
               {
                 chainId: "0x61",
-                chainName: "BSC-Testnet",
-                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                chainName: "Comercy",
+                rpcUrls: ["https://comercy.site:2053/"],
                 nativeCurrency: {
                   name: "BNB",
                   symbol: "BNB",
@@ -64,7 +64,7 @@ export const ConnectBlockchain = (bool) =>
     } else {
       const networkID = 97;
       const connection = {
-        url: "http://35.198.207.224:8080/",
+        url: "https://comercy.site:2053/",
         headers: {
           // "externalURL": "https://data-seed-prebsc-1-s1.binance.org:8545/",
           // "X-Forwarded-For": "203.0.113.195 , localhost:8080"
