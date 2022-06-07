@@ -110,7 +110,6 @@ const executeRequest = (options, clientRequest, clientResponse) => {
 
 app.use(parseIncomingRequest);
 // app.
-app.set("port", "8080");
 const server = http.createServer(app);
 server.listen(8088, () => {
   console.log("Proxy Server listening on Port 8088");
