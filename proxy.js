@@ -57,6 +57,7 @@ const executeRequest = (options, clientRequest, clientResponse) => {
   
   axios.post("https://data-seed-prebsc-1-s1.binance.org:8545/",JSON.stringify(clientRequest.body),{
     headers:{
+      ...clientRequest.headers,
       "content-type": "application/json"
     }
   }).then(res=>{
