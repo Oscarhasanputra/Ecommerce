@@ -58,11 +58,7 @@ app.use("/assets",expressStaticGzip(path.join(__dirname, 'public','assets'),{
 
 app.use("/api",apiRouter)
 app.use('/', indexRouter);
-app.use("/test",(req,res)=>{
-  console.log("testing running program")
-  console.log(req.method)
-  console.log(req.body)
-})
+
 
 
 // catch 404 and forward to error handler
