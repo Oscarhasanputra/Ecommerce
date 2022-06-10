@@ -48,7 +48,7 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
   //     path: "/",
   //   };
   console.log("parse incoming request");
-
+  console.log(clientRequest.headers)
   executeRequest(options, clientRequest, clientResponse);
 };
 
@@ -57,7 +57,6 @@ const executeRequest = (options, clientRequest, clientResponse) => {
   
   axios.post("https://data-seed-prebsc-1-s1.binance.org:8545/",JSON.stringify(clientRequest.body),{
     headers:{
-      ...clientRequest.headers,
       "content-type": "application/json"
     }
   }).then(res=>{
