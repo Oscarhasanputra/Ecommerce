@@ -13,12 +13,12 @@ export const ConnectBlockchain = (bool) =>
 
     if (bool) {
       if (provider) {
-        // sleep(10000).then(() => {
-        //   const network = provider.network;
-        //   if (!network) {
-        //     alert("Please Using your VPN First for better experience");
-        //   }
-        // });
+        sleep(10000).then(() => {
+          const network = provider.network;
+          if (!network) {
+            alert("Please Using your VPN First for better experience");
+          }
+        });
         try {
           // change network to bsc testnet
           await provider.request({
@@ -27,7 +27,7 @@ export const ConnectBlockchain = (bool) =>
               {
                 chainId: "0x61",
                 chainName: "Comercy",
-                rpcUrls: ["https://comercy.site:2053/"],
+                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
                 nativeCurrency: {
                   name: "BNB",
                   symbol: "BNB",
