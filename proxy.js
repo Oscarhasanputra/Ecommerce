@@ -8,8 +8,8 @@ var path = require("path");
 var app = express();
 const cors = require("cors");
 const { default: axios } = require("axios");
-var rpc = require('node-json-rpc');
-const createProxyMiddleware  = require('http-proxy-middleware');
+var rpc = require("node-json-rpc");
+const createProxyMiddleware = require("http-proxy-middleware");
 
 app.use(cors());
 // app.use(express.json());
@@ -20,13 +20,13 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
   const requestToFulfil = url.parse(
     "https://data-seed-prebsc-1-s1.binance.org:8545"
   );
-  
-    const options = {
-      port:8545,
-      host:"data-seed-prebsc-1-s1.binance.org",
-      path:"/",
-      strict:true
-    }
+
+  const options = {
+    port: 8545,
+    host: "data-seed-prebsc-1-s1.binance.org",
+    path: "/",
+    strict: true,
+  };
 
   // const options = {
   //     method: "POST",
@@ -37,22 +37,29 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
   //     path: "/",
   //   };
   console.log("parse incoming request");
-  console.log(clientRequest.headers)
+  console.log(clientRequest.headers);
   executeRequest(options, clientRequest, clientResponse);
 };
 
 const executeRequest = (options, clientRequest, clientResponse) => {
   // http.request({})
-  
-  axios.post("https://data-seed-prebsc-1-s1.binance.org:8545/",JSON.stringify(clientRequest.body),{
-    headers:{
-      "content-type": "application/json"
-    }
-  }).then(res=>{
-    clientResponse.send(res.data)
-  }).catch(err=>{
-    clientResponse.send(err)
-  })
+  if (clientRequest.method == "POST")
+    axios
+      .post(
+        "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        JSON.stringify(clientRequest.body),
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        clientResponse.send(res.data);
+      })
+      .catch((err) => {
+        clientResponse.send(err);
+      });
 };
 
 // Create a HTTP server
@@ -64,7 +71,7 @@ const executeRequest = (options, clientRequest, clientResponse) => {
 // console.log(createProxyMiddleware({ target: 'http://localhost:8000/', changeOrigin: true }))
 // app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
 // app.use("/",createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
-app.post(parseIncomingRequest);
+app.use(parseIncomingRequest);
 
 // app.
 const server = http.createServer(app);
