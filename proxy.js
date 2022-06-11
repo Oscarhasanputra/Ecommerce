@@ -62,7 +62,7 @@ const executeRequest = (options, clientRequest, clientResponse) => {
         }
       )
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         clientResponse.send(res.data);
       })
       .catch((err) => {
