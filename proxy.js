@@ -8,7 +8,13 @@ const numCPUs = require('os').cpus().length;
 const axios =require("axios")
 const cors = require("cors");
 const createProxyMiddleware = require("http-proxy-middleware");
-
+let index=0;
+const urls=[
+  "https://data-seed-prebsc-1-s1.binance.org:8545/",
+  "https://data-seed-prebsc-2-s1.binance.org:8545/",
+  "https://data-seed-prebsc-1-s3.binance.org:8545/",
+  "https://data-seed-prebsc-2-s3.binance.org:8545/",
+]
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,16 +42,18 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
   //     path: "/",
   //   };
   console.log("parse incoming request");
-  console.log(clientRequest.headers);
+  console.log(index)
   executeRequest(options, clientRequest, clientResponse);
 };
 
 const executeRequest = (options, clientRequest, clientResponse) => {
   // http.request({})
+  const urlReq= urls[index];
+  
   // if (clientRequest.method == "POST")
     axios
       .post(
-        "https://data-seed-prebsc-1-s1.binance.org:8545/",
+        urlReq,
         JSON.stringify(clientRequest.body),
         {
           headers: {
@@ -59,7 +67,9 @@ const executeRequest = (options, clientRequest, clientResponse) => {
       })
       .catch((err) => {
         console.log(err)
-        clientResponse.send(err);
+        index = (index+1) > 3?3:index+1;
+        executeRequest(options,clientRequest,clientResponse)
+        // clientResponse.send(err);
       });
 };
 
