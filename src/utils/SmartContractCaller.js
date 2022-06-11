@@ -11,7 +11,7 @@ export const ConnectBlockchain = (bool) =>
   new Promise(async (res, rej) => {
     let provider = await detectEthereumProvider();
 
-    if (!bool) {
+    if (bool) {
       if (provider) {
         // sleep(10000).then(() => {
         //   const network = provider.network;
