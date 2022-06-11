@@ -1,14 +1,8 @@
 const http = require("http");
-const request = require("request");
 const url = require("url");
-const Axios = require("axios");
 var express = require("express");
-var cookieParser = require("cookie-parser");
-var path = require("path");
 var app = express();
 const cors = require("cors");
-const { default: axios } = require("axios");
-var rpc = require("node-json-rpc");
 const createProxyMiddleware = require("http-proxy-middleware");
 
 app.use(cors());
