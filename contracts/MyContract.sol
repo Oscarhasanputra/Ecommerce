@@ -9,9 +9,9 @@ contract MyContract {
     mapping(address=>uint) public balances;
     event TransferReceived(address _from, uint _amount);
     event TransferSent(address _from, address _destAddr, uint _amount);
-
+    event CreateProduct(string name, string desc,string category, uint price);
+    event EditProduct(string name, string desc,string category, uint price);
     struct ProductDetail{
-        uint productID;
         address owner;
         string name;
         string category;
@@ -50,7 +50,8 @@ contract MyContract {
     function addProduct(uint productID,string memory _name,string memory _desc, uint256 _price, string memory _category,
                         string memory _photo) public {
         
-        productDetail[productID]= ProductDetail(productID,msg.sender,_name,_category,_photo,_desc,_price);
+        productDetail[productID]= ProductDetail(msg.sender,_name,_category,_photo,_desc,_price);
+        emit CreateProduct(_name,_desc,_category,_price);
     }
 
     function editProduct(uint productID,string memory _name,string memory _desc, uint256 _price, string memory _category,
@@ -61,7 +62,7 @@ contract MyContract {
         prod.photo = _photo;
         prod.description = _desc;
         prod.price = _price;
-
+        emit EditProduct(_name,_desc,_category,_price);
     }
     
     

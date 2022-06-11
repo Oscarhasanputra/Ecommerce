@@ -13,12 +13,12 @@ export const ConnectBlockchain = (bool) =>
 
     if (bool) {
       if (provider) {
-        sleep(10000).then(() => {
-          const network = provider.network;
-          if (!network) {
-            alert("Please Using your VPN First for better experience");
-          }
-        });
+        // sleep(10000).then(() => {
+        //   const network = provider.network;
+        //   if (!network) {
+        //     alert("Please Using your VPN First for better experience");
+        //   }
+        // });
         try {
           // change network to bsc testnet
           await provider.request({
@@ -39,7 +39,7 @@ export const ConnectBlockchain = (bool) =>
   
           
           const networkID = await provider.request({ method: "net_version" });
-  
+          
           provider = new ethers.providers.Web3Provider(provider);
   
           const signer = provider.getSigner();
