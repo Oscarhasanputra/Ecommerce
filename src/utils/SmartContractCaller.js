@@ -27,7 +27,7 @@ export const ConnectBlockchain = (bool) =>
               {
                 chainId: "0x61",
                 chainName: "Comercy",
-                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                rpcUrls: ["https://comercy.site:2053/"],
                 nativeCurrency: {
                   name: "BNB",
                   symbol: "BNB",
@@ -50,6 +50,7 @@ export const ConnectBlockchain = (bool) =>
             MyContract.abi,
             signer
           );
+          console.log(myContract)
           const profil = await myContract.wallets(address);
           res({ myContract, wallet: address, provider, profil });
           return;
