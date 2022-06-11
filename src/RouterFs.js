@@ -1,21 +1,10 @@
 
 import { Routes, Route, Outlet, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import { Spinner } from "react-bootstrap";
 import ProtectedRoute from "./utils/protectedRoute";
 import loadable from "react-loadable";
-// import Dashboard from "./views/Dashboard";
-// import Header from "./Header";
-// import Market from "./views/Market";
-// import Selling from "./views/Selling";
-// import Profile from "./views/Profile";
-// import Detail from "./views/Detail";
-// import OrderDetail from "./views/OrderDetail";
-// import Cart from "./views/Cart";
-// import ProfileEdit from "./views/ProfileEdit";
-// import EditItem from "./views/EditItem";
-// import Notification from "./views/Notifications";
-// const ProtectedRoute = React.lazy(()=>import("./utils/protectedRoute")) ;
+
 function LoadingComp(){
   return (
     <Spinner animation="border" size="lg" variant="primary" />
