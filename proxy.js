@@ -64,8 +64,8 @@ const executeRequest = (options, clientRequest, clientResponse) => {
       });
 };
 
-// app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
-app.use(parseIncomingRequest);
+app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
+// app.use(parseIncomingRequest);
 
 // app.
 const server = http.createServer(app);
