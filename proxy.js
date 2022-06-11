@@ -12,8 +12,8 @@ var rpc = require("node-json-rpc");
 const createProxyMiddleware = require("http-proxy-middleware");
 
 app.use(cors());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const parseIncomingRequest = (clientRequest, clientResponse) => {
