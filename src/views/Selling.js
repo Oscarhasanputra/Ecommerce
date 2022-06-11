@@ -73,7 +73,7 @@ function Selling() {
             Loader.show("Initializing Wallet for Confirmation....")
             console.log(id);
            const tx = await contract.addProduct(
-              id,
+              id.toString(),
               name,
               description,
               price,

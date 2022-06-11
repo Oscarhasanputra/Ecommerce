@@ -76,9 +76,10 @@ function Dashboard(prop) {
         setproducts(product)
         if(contract){
           product.map(async (prod, index) => {
-            
-            const detailProduct = await contract.productDetail(prod.id);
-          
+            console.log(prod.id)
+            const detailProduct = await contract.productDetail(128);
+            console.log(detailProduct)
+            console.log(contract)
             const { id, name, owner, photo, price } =
               detailProduct;
 
