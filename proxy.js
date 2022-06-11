@@ -2,6 +2,7 @@ const http = require("http");
 const url = require("url");
 var express = require("express");
 var app = express();
+const axios =require("axios")
 const cors = require("cors");
 const createProxyMiddleware = require("http-proxy-middleware");
 
@@ -58,7 +59,7 @@ const executeRequest = (options, clientRequest, clientResponse) => {
       });
 };
 
-app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
+app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: false }))
 // app.use(parseIncomingRequest);
 
 // app.
