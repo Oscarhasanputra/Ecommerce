@@ -11,7 +11,7 @@ function ProtectedRoute({ validated, path, Component, ...props }) {
 
   useEffect(() => {
     const isLogin = localStorage.getItem("login");
-
+    
     if (contract.myContract) {
       if (!contract.myContract || !contract.wallet) {
         alert("Login Metamask Firs!");

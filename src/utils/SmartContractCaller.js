@@ -114,16 +114,7 @@ export const ConnectBlockchain = (bool) =>
         const provider = new ethers.providers.JsonRpcProvider("https://comercy.site:2053/");
         
        
-        // const net=await provider.detectNetwork()
-        // console.log(net)
-        // console.log(net)
-
-        // sleep(10000).then(() => {
-        //   const network = provider.network;
-        //   if (!network) {
-        //     alert("Please Using your VPN First for better experience");
-        //   }
-        // });
+        
 
         await provider.getNetwork();
 
