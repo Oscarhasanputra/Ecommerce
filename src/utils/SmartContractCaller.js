@@ -54,7 +54,7 @@ export const ConnectBlockchain = (bool) =>
           res({ myContract, wallet: address, provider, profil });
           return;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           rej(error);
           alert("Failed Login to Wallet and Try to Refresh Page");
         }
@@ -100,7 +100,7 @@ export const ConnectBlockchain = (bool) =>
           res({ myContract, wallet: address, provider, profil });
           return;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           rej(error);
           alert("Failed Login to Wallet and Try to Refresh Page");
         }
@@ -112,8 +112,7 @@ export const ConnectBlockchain = (bool) =>
       
       try {
         const provider = new ethers.providers.JsonRpcProvider("https://comercy.site:2053/");
-         console.log(provider)
-         console.log("test local")
+        
        
         // const net=await provider.detectNetwork()
         // console.log(net)
@@ -134,12 +133,9 @@ export const ConnectBlockchain = (bool) =>
           MyContract.abi,
           provider
         );
-        console.log(myContract)
-        // console.log(myContract)
         res({ myContract, wallet: address });
       } catch (error) {
-        console.log("error smartcontract");
-        console.log(error);
+        
         rej(error);
       }
 
