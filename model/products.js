@@ -19,6 +19,7 @@ const products = db.define("products",{
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE,
+    txid: Sequelize.TEXT
 
 },{
     freezeTableName: true,

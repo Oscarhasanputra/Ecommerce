@@ -13,6 +13,7 @@ const orderDetail = db.define("orders_detail",{
     createdAt: Sequelize.DATE,
     updatedAt:Sequelize.DATE,
     readStatus:Sequelize.TEXT,
+    txid:Sequelize.TEXT
 },{
     freezeTableName:true,
 }

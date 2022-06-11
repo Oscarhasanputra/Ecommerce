@@ -50,7 +50,7 @@ module.exports = {
      network_id: "*",       // Any network (default: none)
     },
     bscTestnet:{
-      provider : ()=> new HDWalletProvider(mnemonic,"https://data-seed-prebsc-1-s1.binance.org:8545/"),
+      provider : ()=> new HDWalletProvider(mnemonic,"https://comercy.site:2053/"),
       network_id : 97,
       skipDryRun:true
     }

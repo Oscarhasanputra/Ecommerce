@@ -66,35 +66,37 @@ function Selling() {
         .then(async (res) => {
           const { images } = res;
           const { name, description, category, price } = productData;
+          const id = new Date().getTime();
           try {
-            const { dataProduct } = await Save.post("/product", {
-              data: { name, price, category ,owner:session.wallet},
-            });
-            console.log("data product test")
-            console.log(contract)
+           
+
+            Loader.show("Initializing Wallet for Confirmation....")
            const tx = await contract.addProduct(
-              dataProduct.id,
+              id,
               name,
               description,
               price,
               category,
               images
             );
-            // console.log("transaction detail")
-            // console.log(tx)
-            // console.log(tx.value.toNumber())
-            // const gasLimit = tx.gasLimit.toNumber();
-            // const gasPrice = ethers.utils.formatEther(tx.gasPrice.toNumber());
-            // const totalFee= gasLimit * gasPrice;
-            // console.log(totalFee.toFixed(8))
 
+            console.log("transaction detail")
+            console.log(tx)
+            console.log(tx.value.toNumber())
+            Loader.show("Saving Data Product to Blockchain....")
+            const rc=await tx.wait()
+            console.log("response tx")
+            console.log(rc)
+            await Save.post("/product", {
+              data: {id, name, price, category ,owner:session.wallet,txid:tx.hash},
+            });
             Loader.hide();
-            SweetAlert.fire({
-              icon: "success",
-              title: "Success",
-              text: "Product Has Been Added",
-              timer: 1000,
-            }).then(() => {navigate(0)});
+            // SweetAlert.fire({
+            //   icon: "success",
+            //   title: "Success",
+            //   text: "Product Has Been Added",
+            //   timer: 1000,
+            // }).then(() => {navigate(0)});
           } catch (error) {
             Loader.hide();
             SweetAlert.fire({

@@ -10,20 +10,24 @@ function ProtectedRoute({ validated, path, Component, ...props }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!contract.myContract || !contract.wallet) {
-      alert("Login Metamask First!");
-      navigate("/");
-    } else {
-      if (contract.profil && !contract.profil.name) {
-        Swal.fire({
-          title: "Let`s Update Your Profil",
-          icon: "info",
-          timer: 1000,
-        })
-          .then((res) => {
-            navigate("/profile/edit");
+    const isLogin = localStorage.getItem("login");
+
+    if (contract.myContract) {
+      if (!contract.myContract || !contract.wallet) {
+        alert("Login Metamask Firs!");
+        navigate("/");
+      } else {
+        if (contract.profil && !contract.profil.name) {
+          Swal.fire({
+            title: "Let`s Update Your Profil",
+            icon: "info",
+            timer: 1000,
           })
-          .catch((err) => {});
+            .then((res) => {
+              navigate("/profile/edit");
+            })
+            .catch((err) => {});
+        }
       }
     }
   }, [contract]);

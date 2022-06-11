@@ -17,7 +17,7 @@ import "bootstrap/dist/js/bootstrap.js"
 //   state.updateData(window.__state.data);
 //   state.updateSessionTime(new Date())
 // }
-axios.defaults.baseURL="http://localhost:8800/api"
+axios.defaults.baseURL="http://localhost:8000/api"
 // axios.defaults.baseURL="/api"
 
 

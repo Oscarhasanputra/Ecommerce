@@ -165,6 +165,7 @@ function OrderDetail() {
       confirmButtonText: "Yes, Claim to Wallet",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        Loader.show("Initializing Wallet for Confirmation....")
         const tx = await contract.withdraw({
           value: ethers.utils.parseUnits(price.toString(), "ether"),
         });
@@ -175,6 +176,7 @@ function OrderDetail() {
           id: order.id,
           status: "Claimed",
           gas: totalFee,
+          txid:tx.hash
         })
           .then((res) => {
             Loader.hide();

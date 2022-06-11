@@ -40,9 +40,30 @@ const MarketProduct = ({ showModal, product }) => {
   const profil = useSelector(
     (session) => session.ContractReducers.contract.profil
   );
+  const contract = useSelector(
+    (session) => session.ContractReducers.contract.myContract
+  );
   const sessionReducer = useSelector((session) => session.ContractReducers);
   // console.log(product)
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const getDetailContract= async ()=>{
+      const detailProduct = await contract.productDetail(products.id);
+            
+      if (detailProduct) {
+        const { productID, name, owner, photo, price, category } =
+          detailProduct;
+
+        products.name = name;
+        products.owner = owner;
+        products.photo = photo;
+        products.category = category;
+        products.price = price.toNumber();
+        
+        setproducts(products);
+      }
+    }
+    getDetailContract()
+  }, []);
 
   const favorite = () => {
     Save.post("/product/" + product.id)
@@ -165,8 +186,29 @@ const MarketProduct2 = ({ showModal, product }) => {
   const profil = useSelector(
     (session) => session.ContractReducers.contract.profil
   );
+  const contract = useSelector(
+    (session) => session.ContractReducers.contract.myContract
+  );
   const sessionReducer = useSelector((session) => session.ContractReducers);
   useEffect(() => {
+    const getDetailContract= async ()=>{
+      const detailProduct = await contract.productDetail(products.id);
+            
+      if (detailProduct) {
+        const { productID, name, owner, photo, price, category } =
+          detailProduct;
+
+        products.name = name;
+        products.owner = owner;
+        products.photo = photo;
+        products.category = category;
+        products.price = price.toNumber();
+        
+        setproducts(products);
+      }
+    }
+    getDetailContract()
+    
     // Save.get("/product/" + product.id).then((res) => {
     //   product = { ...product, rating: res.rating };
     //   setproducts(product);
@@ -315,7 +357,6 @@ function Market(props) {
               
               setdataProduct([...products]);
             }
-            // return {name,owner,photo,price:detailProduct.price.toNumber(),comment,rating : detailProduct.rating.toNumber()};
           });
         }
         // setstatusData(true)

@@ -199,6 +199,7 @@ const OrderRow = ({ order, index, setmodalShow }) => {
         const weiPrice = ethers.utils.parseUnits(price.toString(), "ether");
         const weiPriceStr = weiPrice.toString();
         try {
+          Loader.show("Initializing Wallet for Confirmation....")
           const tx = await contract.refund(order.seller_id, weiPriceStr);
 
           const gasLimit = tx.gasLimit.toNumber();
@@ -209,6 +210,7 @@ const OrderRow = ({ order, index, setmodalShow }) => {
             id: order.id,
             status: "Refund",
             gas: totalFee,
+            txid:tx.hash
           })
             .then((res) => {
               Loader.hide();
@@ -276,6 +278,7 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
         const weiPrice = ethers.utils.parseUnits(price.toString(), "ether");
         const weiPriceStr = weiPrice.toString();
         try {
+          Loader.show("Initializing Wallet for Confirmation....")
           const tx = await contract.withdraw(weiPriceStr);
 
           const gasLimit = tx.gasLimit.toNumber();
@@ -286,6 +289,7 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
             id: selling.id,
             status: "Claimed",
             gas: totalFee,
+            txid:tx.hash
           })
             .then((res) => {
               Loader.hide();

@@ -6,6 +6,7 @@ import axios from "axios";
 import Save from "../utils/save";
 import Swal from "sweetalert2";
 import { Modal, Button } from "react-bootstrap";
+import { Loader } from "../utils/loader";
 
 const CardCart = ({ emailChange, cartItem, ...props }) => {
   const contractReducer = useSelector(
@@ -211,7 +212,7 @@ const Cart = (props) => {
       if (pattern.test(dataCart.email)){
         const destAddr=dataCart.owner_id;
         // try {
-          
+          Loader.show("Initializing Wallet for Confirmation....")
           const feeProduct = (dataCart.price/priceBNB).toFixed(8)
           const tx= await contract.receive(destAddr,{
             value: ethers.utils.parseUnits(feeProduct.toString(),"ether")
@@ -226,7 +227,8 @@ const Cart = (props) => {
             product_id: dataCart.product_id,
             email: dataCart.email,
             gas:totalFee,
-            price: feeProduct
+            price: feeProduct,
+            txid:tx.hash,
           });
       }
         
@@ -241,6 +243,7 @@ const Cart = (props) => {
         return;
       }
     }
+    Loader.hide();
     const idCartsDelete = cartReducer.map((cart) => cart.id);
 
     // const test= [...cartReducer.id];

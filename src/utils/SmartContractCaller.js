@@ -11,14 +11,14 @@ export const ConnectBlockchain = (bool) =>
   new Promise(async (res, rej) => {
     let provider = await detectEthereumProvider();
 
-    if (bool) {
+    if (!bool) {
       if (provider) {
-        sleep(10000).then(() => {
-          const network = provider.network;
-          if (!network) {
-            alert("Please Using your VPN First for better experience");
-          }
-        });
+        // sleep(10000).then(() => {
+        //   const network = provider.network;
+        //   if (!network) {
+        //     alert("Please Using your VPN First for better experience");
+        //   }
+        // });
         try {
           // change network to bsc testnet
           await provider.request({
@@ -37,9 +37,7 @@ export const ConnectBlockchain = (bool) =>
             ],
           });
   
-          const accounts = await provider.request({
-            method: "eth_requestAccounts",
-          });
+          
           const networkID = await provider.request({ method: "net_version" });
   
           provider = new ethers.providers.Web3Provider(provider);
@@ -110,28 +108,23 @@ export const ConnectBlockchain = (bool) =>
       }
     } else {
       const networkID = 97;
-      const connection = {
-        url: "https://comercy.site:2053/",
-        headers: {
-          // "externalURL": "https://data-seed-prebsc-1-s1.binance.org:8545/",
-          // "X-Forwarded-For": "203.0.113.195 , localhost:8080"
-        },
-      };
-      // console.log("connection forwarded")
-      // console.log(connection);
+      
+      
       try {
-        const provider = new ethers.providers.JsonRpcProvider(connection);
-        //  const net= provider.connection
+        const provider = new ethers.providers.JsonRpcProvider("https://comercy.site:2053/");
+         console.log(provider)
+         console.log("test local")
+       
         // const net=await provider.detectNetwork()
-
+        // console.log(net)
         // console.log(net)
 
-        sleep(10000).then(() => {
-          const network = provider.network;
-          if (!network) {
-            alert("Please Using your VPN First for better experience");
-          }
-        });
+        // sleep(10000).then(() => {
+        //   const network = provider.network;
+        //   if (!network) {
+        //     alert("Please Using your VPN First for better experience");
+        //   }
+        // });
 
         await provider.getNetwork();
 
@@ -141,6 +134,7 @@ export const ConnectBlockchain = (bool) =>
           MyContract.abi,
           provider
         );
+        console.log(myContract)
         // console.log(myContract)
         res({ myContract, wallet: address });
       } catch (error) {
