@@ -43,7 +43,7 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
 
 const executeRequest = (options, clientRequest, clientResponse) => {
   // http.request({})
-  if (clientRequest.method == "POST")
+  // if (clientRequest.method == "POST")
     axios
       .post(
         "https://data-seed-prebsc-1-s1.binance.org:8545/",
@@ -55,22 +55,16 @@ const executeRequest = (options, clientRequest, clientResponse) => {
         }
       )
       .then((res) => {
+        console.log(res)
         clientResponse.send(res.data);
       })
       .catch((err) => {
+        console.log(err)
         clientResponse.send(err);
       });
 };
 
-// Create a HTTP server
-// app.use("/",(req,res)=>{
-//     console.log(req.method)
-//     console.log(req.body)
-// })
-// createProxyMiddleware("/",{})
-// console.log(createProxyMiddleware({ target: 'http://localhost:8000/', changeOrigin: true }))
 // app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
-// app.use("/",createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
 app.use(parseIncomingRequest);
 
 // app.
