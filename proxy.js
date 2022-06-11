@@ -8,7 +8,7 @@ const createProxyMiddleware = require("http-proxy-middleware");
 app.use(cors());
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
+// app.use(cookieParser())
 
 const parseIncomingRequest = (clientRequest, clientResponse) => {
   const requestToFulfil = url.parse(
