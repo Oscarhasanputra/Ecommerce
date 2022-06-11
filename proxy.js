@@ -62,7 +62,6 @@ const executeRequest = (options, clientRequest, clientResponse) => {
       });
 };
 
-app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
 // app.use(parseIncomingRequest);
 
 // app.
@@ -83,6 +82,8 @@ if (cluster.isMaster) {
   console.log(`Worker ${process.pid} started`);
   const server = http.createServer(app);
 
+  app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
+  
   server.listen(8088, () => {
     console.log("Proxy Server listening on Port 8088");
   });
