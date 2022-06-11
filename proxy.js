@@ -44,12 +44,14 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
 const executeRequest = (options, clientRequest, clientResponse) => {
   // http.request({})
   
-  axios.get("https://comercy.site/api/products",JSON.stringify(clientRequest.body),{
+  axios.post("https://data-seed-prebsc-1-s1.binance.org:8545/",JSON.stringify(clientRequest.body),{
     headers:{
       "content-type": "application/json"
     }
   }).then(res=>{
     clientResponse.send(res.data)
+  }).catch(err=>{
+    clientResponse.send(err)
   })
 };
 
@@ -60,9 +62,9 @@ const executeRequest = (options, clientRequest, clientResponse) => {
 // })
 // createProxyMiddleware("/",{})
 // console.log(createProxyMiddleware({ target: 'http://localhost:8000/', changeOrigin: true }))
-app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
+// app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
 // app.use("/",createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
-// app.use(parseIncomingRequest);
+app.post(parseIncomingRequest);
 
 // app.
 const server = http.createServer(app);
