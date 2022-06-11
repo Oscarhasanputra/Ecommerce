@@ -44,14 +44,14 @@ function Header(props) {
         console.log("get contract....")
         const myContract = await ConnectBlockchain(isLogin);
         
-        // if(isLogin){
-        //   const accountBalance = await myContract.provider.getBalance(
-        //     myContract.wallet
-        //   );
-        //   const balance = ethers.utils.formatEther(accountBalance.toString());
+        if(isLogin){
+          const accountBalance = await myContract.provider.getBalance(
+            myContract.wallet
+          );
+          const balance = ethers.utils.formatEther(accountBalance.toString());
   
-        //   props.updateBalance(balance);
-        // }
+          props.updateBalance(balance);
+        }
       
         // const exchangeInfo = await axios.get(
         //   "https://api.binance.com/api/v1/ticker/24hr?symbol=BNBBIDR"
