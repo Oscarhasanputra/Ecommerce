@@ -67,7 +67,7 @@ const executeRequest = (options, clientRequest, clientResponse) => {
       })
       .catch((err) => {
         console.log(err)
-        index = (index+1) > 3?3:index+1;
+        index = (index+1) < 3?index+1:0;
         executeRequest(options,clientRequest,clientResponse)
         // clientResponse.send(err);
       });
