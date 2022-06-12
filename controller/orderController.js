@@ -58,6 +58,10 @@ const updateOrder = async (req, res) => {
       return res.status(200).json({
         message: "You are successfully Claiming Fee into Your Wallet",
       });
+    else if (save.getDataValue("status")=="Refund")
+      return res.status(200).json({
+        message:" You are successfully Refund back into Your Wallet"
+      })
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: " Found Mistake while you send Response" });
