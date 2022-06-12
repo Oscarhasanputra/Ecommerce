@@ -72,14 +72,14 @@ function Dashboard(prop) {
         const productsData = await Save.get("/products");
        
         const product= productsData.slice(0,6);
-        
+        console.log(product)
         setproducts(product)
         if(contract){
           product.map(async (prod, index) => {
             console.log(prod.id)
-            const detailProduct = await contract.productDetail(128);
+            const detailProduct = await contract.productDetail(prod.id);
             console.log(detailProduct)
-            console.log(contract)
+            // console.log(contract)
             const { id, name, owner, photo, price } =
               detailProduct;
 

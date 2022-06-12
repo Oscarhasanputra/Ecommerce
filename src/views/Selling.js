@@ -71,9 +71,9 @@ function Selling() {
            
 
             Loader.show("Initializing Wallet for Confirmation....")
-            console.log(id);
+            
            const tx = await contract.addProduct(
-              id.toString(),
+              id,
               name,
               description,
               price,
@@ -81,11 +81,8 @@ function Selling() {
               images
             );
 
-            console.log("transaction detail")
-            console.log(tx)
-            console.log(tx.value.toNumber())
-            // Loader.show("Saving Data Product to Blockchain....")
-            // const rc=await tx.wait()
+            Loader.show("Saving Data Product to Blockchain....")
+            const rc=await tx.wait()
             // console.log("response tx")
             // console.log(rc)
             // console.log(id)
@@ -93,12 +90,12 @@ function Selling() {
               data: {id, name, price, category ,owner:session.wallet,txid:tx.hash},
             });
             Loader.hide();
-            // SweetAlert.fire({
-            //   icon: "success",
-            //   title: "Success",
-            //   text: "Product Has Been Added",
-            //   timer: 1000,
-            // }).then(() => {navigate(0)});
+            SweetAlert.fire({
+              icon: "success",
+              title: "Success",
+              text: "Product Has Been Added",
+              timer: 1000,
+            }).then(() => {navigate(0)});
           } catch (error) {
             Loader.hide();
             SweetAlert.fire({

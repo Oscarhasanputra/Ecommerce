@@ -117,7 +117,6 @@ const giveRating=async(req,res)=>{
 const createProduct=async(req,res)=>{
   const {data} =req.body;
   console.log(data)
-  data.id= new Date().getTime()
   try {
       const dataProduct=await products.create(data);
       res.status(200).json({dataProduct});

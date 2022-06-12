@@ -180,7 +180,7 @@ function Header(props) {
               <Dropdown>
                 <Dropdown.Toggle
                   id="dropdown-basic"
-                  className="bg-none btn-overlay"
+                  className="bg-none btn-overlay d-none d-md-block"
                   size="lg"
                 >
                   <i className="material-icons">notifications</i>
@@ -203,7 +203,7 @@ function Header(props) {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Link className="btn btn-lg btn-icon mx-2 btn-overlay" to="/cart">
+              <Link className="btn btn-lg btn-icon mx-2 btn-overlay d-none d-md-block" to="/cart">
                 <i className="material-icons">shopping_cart</i>
                 <span>{props.cart.length}</span>
               </Link>
@@ -300,7 +300,7 @@ function Header(props) {
                 </ul>
               </div>
               {props.balance && (
-                <span className="font-noto text-white align-self-center">
+                <span className="font-noto text-white align-self-center d-none d-sm-block">
                   {" "}
                   {props.balance}{" "}
                   <img src="/assets/images/BNB.png" style={{ height: 30 }} />
@@ -322,21 +322,21 @@ function Header(props) {
             <div className="drawer-menu">
               <div className="nav">
                 {/* <!-- Drawer section heading (Account)--> */}
-                <div className="drawer-menu-heading d-sm-none">Account</div>
+                {/* <div className="drawer-menu-heading d-md-none">Account</div> */}
                 {/* <!-- Drawer link (Notifications)--> */}
-                <a className="nav-link d-sm-none" href="#!">
+                <Link className="nav-link d-md-none" to="/notification">
                   <div className="nav-link-icon">
                     <i className="material-icons">notifications</i>
                   </div>
                   Notifications
-                </a>
+                </Link>
                 {/* <!-- Drawer link (Messages)--> */}
-                <a className="nav-link d-sm-none" href="#!">
+                <Link className="nav-link d-md-none" to="/cart">
                   <div className="nav-link-icon">
-                    <i className="material-icons">mail</i>
+                  <i className="material-icons">shopping_cart</i>
                   </div>
-                  Messages
-                </a>
+                  Cart
+                </Link>
                 {/* <!-- Divider--> */}
                 <div className="drawer-menu-divider d-sm-none"></div>
                 {/* <!-- Drawer section heading (Interface)--> */}

@@ -516,7 +516,7 @@ function Market(props) {
       <input
         type="text"
         placeholder="Search ....."
-        className="shadow-3 rounded-3 p-3 card-search border-0 col-7"
+        className="shadow-3 rounded-3 p-3 card-search border-0 col-12 col-md-7 my-2"
         value={search}
         onChange={(e) => {
           e.preventDefault();
@@ -524,7 +524,7 @@ function Market(props) {
         }}
       ></input>
       <select
-        className="shadow-3 rounded-3 p-3 card-search border-0 col-4 ms-5"
+        className="shadow-3 rounded-3 p-3 card-search border-0 col-12 col-md-4 ms-md-5 my-2"
         aria-label=""
         value={filtered}
         onChange={(e) => {

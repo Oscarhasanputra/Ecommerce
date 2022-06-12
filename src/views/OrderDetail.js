@@ -165,10 +165,13 @@ function OrderDetail() {
       confirmButtonText: "Yes, Claim to Wallet",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        const weiPrice = ethers.utils.parseUnits(price.toString(), "ether");
+        const weiPriceStr = weiPrice.toString();
         Loader.show("Initializing Wallet for Confirmation....")
-        const tx = await contract.withdraw({
-          value: ethers.utils.parseUnits(price.toString(), "ether"),
-        });
+        const tx = await contract.withdraw(weiPriceStr);
+     
+        Loader.show(" Claim Saldo to your Wallet...")
+        await tx.wait();
         const gasLimit = tx.gasLimit.toNumber();
         const gasPrice = ethers.utils.formatEther(tx.gasPrice.toNumber());
         const totalFee = (gasLimit * gasPrice).toFixed(8);

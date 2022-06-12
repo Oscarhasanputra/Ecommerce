@@ -201,7 +201,8 @@ const OrderRow = ({ order, index, setmodalShow }) => {
         try {
           Loader.show("Initializing Wallet for Confirmation....")
           const tx = await contract.refund(order.seller_id, weiPriceStr);
-
+          Loader.show("Refund Saldo to your Wallet...")
+          await tx.wait()
           const gasLimit = tx.gasLimit.toNumber();
           const gasPrice = ethers.utils.formatEther(tx.gasPrice.toNumber());
           const totalFee = (gasLimit * gasPrice).toFixed(8);
@@ -280,7 +281,8 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
         try {
           Loader.show("Initializing Wallet for Confirmation....")
           const tx = await contract.withdraw(weiPriceStr);
-
+          Loader.show(" Claim Saldo to your Wallet...")
+          await tx.wait();
           const gasLimit = tx.gasLimit.toNumber();
           const gasPrice = ethers.utils.formatEther(tx.gasPrice.toNumber());
           const totalFee = (gasLimit * gasPrice).toFixed(8);
