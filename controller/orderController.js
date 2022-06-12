@@ -179,13 +179,10 @@ const getAllMyOrderNotif = async (req, res) => {
 const getMyOrder = async (req, res) => {
   const { user_id } = req.query;
   try {
-    const myOrder = await order.findAll({ where: { buyer_id: user_id } });
-    const mySelling = await order.findAll({ where: { seller_id: user_id } });
-    // const data= await user.findOne({where:{id:user_id},
-    //     include:[{model:order,as:"myorder",include:[{model:product},{model:user,as:"seller"}]},{model:order,as:"mysell",include:[{model:product},{model:user,as:"buyer"}]},
-    //     ]
-    // })
-
+    const myOrder = await order.findAll({ where: { buyer_id: user_id },include:[{model:products}] });
+    const mySelling = await order.findAll({ where: { seller_id: user_id },include:[{model:products}] });
+   
+    
     res.json({ myOrder, mySelling });
   } catch (error) {
     console.log(error);

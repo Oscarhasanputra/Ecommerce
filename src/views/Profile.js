@@ -127,7 +127,7 @@ const ProfileDraft = ({ ...props }) => {
                 className="switch_1"
                 onChange={function (e) {
                   const status = e.target.checked;
-                  console.log(products);
+                  
                   $(e.target).prop("checked", !status); //
                   const text = status ? "ON" : "OFF";
                   Save.put("/products", products.id, { status: text })
@@ -136,7 +136,7 @@ const ProfileDraft = ({ ...props }) => {
                     })
                     .catch(() => {});
 
-                  console.log("berubah");
+                  
                 }}
               />
             </div>
@@ -307,6 +307,7 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
       }
     });
   };
+  console.log(selling)
   return (
     <tr>
       <th scope="row">{index}</th>
@@ -361,8 +362,7 @@ function Profile() {
       const { email, name, photo, profesi } = await contract.wallets(address);
       setprofil({ email, name, photo, profesi });
     };
-    console.log("addressing");
-    console.log(address);
+    
     if (address != null) {
       getProfile();
       axios
