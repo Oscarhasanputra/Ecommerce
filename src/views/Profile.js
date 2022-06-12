@@ -468,7 +468,7 @@ function Profile() {
       </div>
       <Tab.Container id="left-tabs-example" defaultActiveKey="galery">
         <Nav variant="pills" className="flex-row my-3">
-          <Nav.Item className="col-6" style={{ cursor: "pointer" }}>
+          <Nav.Item className="col-12 col-md-6" style={{ cursor: "pointer" }}>
             <Nav.Link eventKey="history" className="text-center title-roboto-2">
               <i
                 className="material-icons"
@@ -479,7 +479,7 @@ function Profile() {
               Activity
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item className="col-6" style={{ cursor: "pointer" }}>
+          <Nav.Item className="col-12 col-md-6" style={{ cursor: "pointer" }}>
             <Nav.Link eventKey="galery" className="text-center title-roboto-2">
               <i
                 className="material-icons"
@@ -498,10 +498,10 @@ function Profile() {
               <input
                 type="text"
                 placeholder="Search ....."
-                className="shadow-3 rounded-3 p-3 card-search border-0 col-7"
+                className="shadow-3 rounded-3 p-3 card-search border-0 col-12 col-sm-7"
               ></input>
               <select
-                className="shadow-3 rounded-3 p-3 card-search border-0 col-4 ms-5"
+                className="shadow-3 rounded-3 p-3 card-search border-0 col-12 col-sm-4 ms-0 ms-sm-5 my-2 my-sm-0"
                 aria-label=""
                 value={filteredOrder}
                 onChange={(evt) => setfilteredOrder(evt.target.value)}

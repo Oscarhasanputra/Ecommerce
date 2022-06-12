@@ -4,7 +4,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 import Save from "../utils/save";
-import {Spinner} from "react-bootstrap"
+import { Spinner } from "react-bootstrap";
 import { ConnectBlockchain } from "../utils/SmartContractCaller";
 const ImageLoader = ({ photo, productID }) => {
   const navigate = useNavigate();
@@ -46,24 +46,26 @@ const MarketProduct = ({ showModal, product }) => {
   const sessionReducer = useSelector((session) => session.ContractReducers);
   // console.log(product)
   useEffect(() => {
-    const getDetailContract= async ()=>{
-      const detailProduct = await contract.productDetail(products.id);
-            
-      if (detailProduct) {
-        const { productID, name, owner, photo, price, category } =
-          detailProduct;
+    const getDetailContract = async () => {
+      if (contract) {
+        const detailProduct = await contract.productDetail(products.id);
 
-        products.name = name;
-        products.owner = owner;
-        products.photo = photo;
-        products.category = category;
-        products.price = price.toNumber();
-        
-        setproducts(products);
+        if (detailProduct) {
+          const { productID, name, owner, photo, price, category } =
+            detailProduct;
+
+          products.name = name;
+          products.owner = owner;
+          products.photo = photo;
+          products.category = category;
+          products.price = price.toNumber();
+
+          setproducts(products);
+        }
       }
-    }
-    getDetailContract()
-  }, []);
+    };
+    getDetailContract();
+  }, [contract]);
 
   const favorite = () => {
     Save.post("/product/" + product.id)
@@ -191,29 +193,31 @@ const MarketProduct2 = ({ showModal, product }) => {
   );
   const sessionReducer = useSelector((session) => session.ContractReducers);
   useEffect(() => {
-    const getDetailContract= async ()=>{
-      const detailProduct = await contract.productDetail(products.id);
-            
-      if (detailProduct) {
-        const { productID, name, owner, photo, price, category } =
-          detailProduct;
+    const getDetailContract = async () => {
+      if (contract) {
+        const detailProduct = await contract.productDetail(products.id);
 
-        products.name = name;
-        products.owner = owner;
-        products.photo = photo;
-        products.category = category;
-        products.price = price.toNumber();
-        
-        setproducts(products);
+        if (detailProduct) {
+          const { productID, name, owner, photo, price, category } =
+            detailProduct;
+
+          products.name = name;
+          products.owner = owner;
+          products.photo = photo;
+          products.category = category;
+          products.price = price.toNumber();
+
+          setproducts(products);
+        }
       }
-    }
-    getDetailContract()
-    
+    };
+    getDetailContract();
+
     // Save.get("/product/" + product.id).then((res) => {
     //   product = { ...product, rating: res.rating };
     //   setproducts(product);
     // });
-  }, []);
+  }, [contract]);
 
   const favorite = () => {
     Save.post("/product/" + product.id)
@@ -341,23 +345,23 @@ function Market(props) {
         setdataProduct(products);
         if (props.contract) {
           const contract = props.contract;
-          
-          products.map(async (prod, index) => {
-            const detailProduct = await contract.productDetail(prod.id);
-            
-            if (detailProduct) {
-              const { productID, name, owner, photo, price, category } =
-                detailProduct;
 
-              prod.name = name;
-              prod.owner = owner;
-              prod.photo = photo;
-              prod.category = category;
-              prod.price = price.toNumber();
-              
-              setdataProduct([...products]);
-            }
-          });
+          // products.map(async (prod, index) => {
+          //   const detailProduct = await contract.productDetail(prod.id);
+          //   console.log(contract)
+          //   if (detailProduct) {
+          //     const { productID, name, owner, photo, price, category } =
+          //       detailProduct;
+
+          //     prod.name = name;
+          //     prod.owner = owner;
+          //     prod.photo = photo;
+          //     prod.category = category;
+          //     prod.price = price.toNumber();
+
+          //     setdataProduct([...products]);
+          //   }
+          // });
         }
         // setstatusData(true)
       } catch (error) {}
@@ -367,7 +371,7 @@ function Market(props) {
     // Save.get("/products").then((res) => {
     //   setdataProduct(res.dataProduct);
     // });
-  }, [props.wallet, filtered, search, props.contract]);
+  }, [props.wallet, filtered, search]);
   const navigate = useNavigate();
 
   const loadProduct = () => {
@@ -422,7 +426,6 @@ function Market(props) {
       );
     }
     for (let i = perRowCount * maxCount; i < productsLoaded.length; i++) {
-      
       cards.push(
         <MarketProduct
           key={productsLoaded[i].id + i}
@@ -545,11 +548,14 @@ function Market(props) {
         <MarketProduct showModal={showModal}></MarketProduct>
         <MarketProduct showModal={showModal}></MarketProduct> */}
         {loadProduct()}
-        {dataProduct.length<=0 && <Spinner animation="border" size="lg" variant="primary" />}
-        {dataProduct.length>0 && <nav className="">
-          <ul className="pagination pagination-lg justify-content-center">
-            {loadNavigation()}
-            {/* <li class="page-item">
+        {dataProduct.length <= 0 && (
+          <Spinner animation="border" size="lg" variant="primary" />
+        )}
+        {dataProduct.length > 0 && (
+          <nav className="">
+            <ul className="pagination pagination-lg justify-content-center">
+              {loadNavigation()}
+              {/* <li class="page-item">
               <a class="page-link" href="#">
                 1
               </a>
@@ -562,8 +568,9 @@ function Market(props) {
                 3
               </a>
             </li> */}
-          </ul>
-        </nav>}
+            </ul>
+          </nav>
+        )}
       </div>
       <Modal show={show} onHide={() => setshow(false)} centered>
         <Modal.Header closeButton>

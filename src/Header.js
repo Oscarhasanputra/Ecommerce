@@ -324,7 +324,7 @@ function Header(props) {
                 {/* <!-- Drawer section heading (Account)--> */}
                 {/* <div className="drawer-menu-heading d-md-none">Account</div> */}
                 {/* <!-- Drawer link (Notifications)--> */}
-                <Link className="nav-link d-md-none" to="/notification">
+                <Link className="nav-link d-md-none" to="/notifications">
                   <div className="nav-link-icon">
                     <i className="material-icons">notifications</i>
                   </div>

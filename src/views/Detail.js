@@ -1,11 +1,29 @@
-import {  useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import {  connect } from "react-redux";
+import { connect } from "react-redux";
 import Save from "../utils/save";
-import {ConnectBlockchain} from "../utils/SmartContractCaller"
-import {ethers} from "ethers"
+import { ConnectBlockchain } from "../utils/SmartContractCaller";
+import { ethers } from "ethers";
 import axios from "axios";
+const ImageLoader = ({ photo }) => {
+  if (photo == null) {
+    return (
+      <div className="d-flex skeleton" style={{ height: 300 }}>
+        <span className="m-auto title-2">Image...</span>
+      </div>
+    );
+  } else {
+    return (
+      <img
+        className={
+          "d-block image-rounded w-100 " + (photo == null && "skeleton")
+        }
+        src={photo && "/assets/" + photo}
+      ></img>
+    );
+  }
+};
 const CommentCard = ({ comment, person }) => {
   return (
     <div className="card my-3 shadow-sm" style={{ padding: 0 }}>
@@ -25,7 +43,7 @@ function Detail(props) {
   const [email, setemail] = useState("");
   const [product, setproduct] = useState({});
   const [comment, setcomment] = useState("");
-  const [dataComment, setdataComment] = useState([])
+  const [dataComment, setdataComment] = useState([]);
   const showModal = () => {
     setshow(true);
   };
@@ -35,19 +53,11 @@ function Detail(props) {
     const getProduct = async () => {
       const contract = props.contract.myContract;
       try {
-        
         const detailProduct = await contract.productDetail(id);
-        const {
-          category,
-          description,
-          name,
-          owner,
-          photo,
-          price,
-          productID,
-        } = detailProduct;
+        const { category, description, name, owner, photo, price, productID } =
+          detailProduct;
 
-        const dataProduct={
+        const dataProduct = {
           category,
           comment,
           description,
@@ -56,28 +66,33 @@ function Detail(props) {
           price: price.toNumber(),
           photo,
           productID,
-        }
+        };
 
-        Save.get("/product/"+id).then(res=>{
-          setproduct({...dataProduct,rating:res.rating})
-          console.log(res)
-        }).catch(err=>{})
+        Save.get("/product/" + id)
+          .then((res) => {
+            setproduct({ ...dataProduct, rating: res.rating });
+            // console.log(res);
+          })
+          .catch((err) => {});
 
         setproduct(dataProduct);
       } catch (error) {}
     };
     getProduct();
-    axios.get("/comments",{params:{product_id:id}}).then(res=>{
-        const dataComments=res.data.data;
-        setdataComment(dataComments)
-    }).catch(err=>{})
+    axios
+      .get("/comments", { params: { product_id: id } })
+      .then((res) => {
+        const dataComments = res.data.data;
+        setdataComment(dataComments);
+      })
+      .catch((err) => {});
     // Save.get("/comments",{data:{product_id:1231}}).then(res=>{
-    //   console.log(res)
+    // console.log(res)
     // }).catch(err=>{
 
     // })
   }, []);
-  console.log(product)
+  // console.log(product);
   const onAddCart = async () => {
     const cart = props.cart;
     // console.log(props.wallet)
@@ -98,16 +113,16 @@ function Detail(props) {
   };
   const onComment = async () => {
     const contract = props.contract.myContract;
-    const data ={
-      text:comment,
+    const data = {
+      text: comment,
       product_id: product.productID.toNumber(),
-      user_id: props.wallet
-    }
-    Save.post("/comments",{data}).then(res=>{
-      navigate(0)
-    }).catch(err=>{
-
-    })
+      user_id: props.wallet,
+    };
+    Save.post("/comments", { data })
+      .then((res) => {
+        navigate(0);
+      })
+      .catch((err) => {});
     // Loader.show();
     // await contract.addComments(comment, id);
     // Loader.hide();
@@ -118,18 +133,14 @@ function Detail(props) {
     if (product.comment) {
       const commentCard = dataComment.map((val, index) => {
         return (
-          <CommentCard
-            key={index}
-            comment={val.text}
-            person={val.user_id}
-          />
+          <CommentCard key={index} comment={val.text} person={val.user_id} />
         );
       });
       return commentCard;
     }
   };
 
-  const connectWallet=()=>{
+  const connectWallet = () => {
     ConnectBlockchain(true)
       .then(async (contract) => {
         props.updateContract(contract);
@@ -144,18 +155,27 @@ function Detail(props) {
         // props.updateBalance(balance);
       })
       .catch((err) => {});
-  }
-  console.log(props.profil)
+  };
+  // console.log(props.profil);
   return (
     <div className="container-xl p-5 row">
-      <div className="col-5">
-        <img
-          src={"/assets/" + product.photo}
-          className="image-rounded w-100"
-        ></img>
-         {props.wallet && !(props.wallet==product.owner) && props.profil.name && (
+      <div className="col-12 col-md-5">
+        {<ImageLoader photo={product.photo} />}
+
+        
+        <div className="d-flex flex-row justify-content-center">
+        <div
+            className="w-100 px-4 my-2 align-items-center text-center text-white btn-success btn-rounded shadow "
+            style={{ color: "#018AD7", cursor: "pointer" }}
+            onClick={() => showModal}
+          >
+
+            Scan Data Blockchain
+          </div>
+        </div>
+        {props.wallet && !(props.wallet == product.owner) && props.profil.name && (
           <div
-            className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg"
+            className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg text-center"
             style={{ color: "#018AD7", cursor: "pointer" }}
             onClick={() => showModal}
           >
@@ -164,7 +184,7 @@ function Detail(props) {
         )}
         {props.wallet && !props.profil.name && (
           <div
-            className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg"
+            className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg text-center"
             style={{ color: "#018AD7", cursor: "pointer" }}
             onClick={() => navigate("/profile/edit")}
           >
@@ -173,36 +193,70 @@ function Detail(props) {
         )}
         {!props.wallet && (
           <div
-            className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg"
+            className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg text-center"
             style={{ color: "#018AD7", cursor: "pointer" }}
             onClick={() => connectWallet()}
           >
             Connect Wallet
           </div>
         )}
-      
       </div>
-      <div className="col-7 align-self-start">
-        <div className="title-1">{product.name}</div>
-        <div className="font-nato d-flex">
-          <span className="material-icons align-self-center me-1">
-            account_circle
-          </span>{" "}
-          {product.owner}
-          {/* {product.owner && product.user.name} */}
-          <span className="material-icons align-self-center ms-5 me-1">
-            favorite
-          </span>{" "}
-          {product.rating}
-        </div>
-        <div className="d-flex flex-row">
-          <img src="/assets/images/BNB.png" className="align-self-center" style={{height:30}}></img>
-          <div className="title-2 my-2">{(product.price/props.priceBNB).toFixed(6)} </div>
-        </div>
+      <div className="col-12 col-md-7 my-5 my-md-0 align-self-start">
+        {!product.name && (
+          <div
+            className="mx-3 d-flex flex-column justify-content-between"
+            style={{ flexGrow: 1 }}
+          >
+            <div className="skeleton skeleton-text"></div>
+            <div className="skeleton skeleton-text"></div>
+            <div className="skeleton skeleton-text"></div>
+          </div>
+        )}
+
+        {product.name && <div className="title-1">{product.name}</div>}
+
+        {product.name && (
+          <div className="font-nato d-flex">
+            <span className="material-icons align-self-center me-1">
+              account_circle
+            </span>{" "}
+            {product.owner}
+            {/* {product.owner && product.user.name} */}
+            <span className="material-icons align-self-center ms-5 me-1">
+              favorite
+            </span>{" "}
+            {product.rating}
+          </div>
+        )}
+        {product.name && (
+          <div className="d-flex flex-row">
+            <img
+              src="/assets/images/BNB.png"
+              className="align-self-center"
+              style={{ height: 30 }}
+            ></img>
+            <div className="title-2 my-2">
+              {(product.price / props.priceBNB).toFixed(6)}{" "}
+            </div>
+          </div>
+        )}
 
         <div className="card my-3 shadow-sm">
           <div className="card-header">Description</div>
-          <div className="card-body">{product.description}</div>
+          {!product.description && (
+            <div
+              className="mx-3 my-3 d-flex flex-column justify-content-between"
+              style={{ flexGrow: 1 }}
+            >
+              <div className="skeleton skeleton-text"></div>
+              <div className="skeleton skeleton-text"></div>
+              <div className="skeleton skeleton-text"></div>
+              <div className="skeleton skeleton-text"></div>
+            </div>
+          )}
+          {product.description && (
+            <div className="card-body">{product.description}</div>
+          )}
         </div>
 
         {/* comment card */}
@@ -259,8 +313,8 @@ const mapToProps = (state) => {
   return {
     contract: state.ContractReducers.contract,
     wallet: state.ContractReducers.contract.wallet,
-    priceBNB:state.ContractReducers.price,
-    profil:state.ContractReducers.contract.profil,
+    priceBNB: state.ContractReducers.price,
+    profil: state.ContractReducers.contract.profil,
     cart: state.CartReducers,
   };
 };
@@ -268,8 +322,8 @@ const dispatchToProps = (dispatch) => {
   return {
     add: (data) => dispatch({ type: "add", data }),
     delete: (index) => dispatch({ type: "delete", index }),
-    updateContract : (contract)=> dispatch({type:"update",contract}),
-    updateBalance : (price)=> dispatch({type:"balance",price})
+    updateContract: (contract) => dispatch({ type: "update", contract }),
+    updateBalance: (price) => dispatch({ type: "balance", price }),
   };
 };
 export default connect(mapToProps, dispatchToProps)(Detail);

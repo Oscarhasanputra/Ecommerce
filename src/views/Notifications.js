@@ -45,11 +45,11 @@ const CardNotif = ({ text, data, ...props }) => {
         </i>{" "}
         {profil}
       </div>
-      <div className="d-flex flex-row justify-content-between">
-        <div className="title-roboto-1 mt-3 text-line-1" style={{ height: "auto",padding:1,lineHeight:1 }}>
+      <div className="d-flex row justify-content-between">
+        <div className="title-roboto-1 col-12 col-md-8 mt-3 text-line-1" style={{ height: "auto",padding:1,lineHeight:1 }}>
           {text}
         </div>
-        <Link to={"/order/" + data.order.id} className="btn btn-primary me-2">
+        <Link to={"/order/" + data.order.id} className="btn btn-primary col-12 col-md-2 me-2 my-2 my-md-0 justify-content-center">
             Check
           </Link>
       </div>
