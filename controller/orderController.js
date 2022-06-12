@@ -15,6 +15,8 @@ const checkoutOrder = async (req, res) => {
         txid:data[index].txid,
       };
     });
+    console.log("order")
+    console.log(orderDetailData)
     // const values = orderData.dataValues;
     await orderDetail.bulkCreate(orderDetailData);
     // await orderDetail.create({ orders_id: values.id, status: values.status });
@@ -23,6 +25,7 @@ const checkoutOrder = async (req, res) => {
         "Checkout the Product has Completed, Waiting for the Response from Seller",
     });
   } catch (error) {
+    console.log(error)
     return res
       .status(400)
       .json({ message: "Found a Mistake While you were Checkout" });
