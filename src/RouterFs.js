@@ -1,14 +1,11 @@
-
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route, Outlet, Link, BrowserRouter } from "react-router-dom";
 
 import { Spinner } from "react-bootstrap";
 import ProtectedRoute from "./utils/protectedRoute";
 import loadable from "react-loadable";
-
-function LoadingComp(){
-  return (
-    <Spinner animation="border" size="lg" variant="primary" />
-  )
+// import
+function LoadingComp() {
+  return <Spinner animation="border" size="lg" variant="primary" />;
 }
 
 const Header = loadable({
@@ -61,7 +58,7 @@ export default function RouterFs() {
   console.log("hello world");
   // console.log(session.isAuth())
   return (
-    <div>
+    <BrowserRouter basename="/">
       <Routes>
         <Route path="/" element={<Header />}>
           <Route path="/" exact element={<Dashboard />}></Route>
@@ -123,6 +120,6 @@ export default function RouterFs() {
           />
         </Route>
       </Routes>
-    </div>
+    </BrowserRouter>
   );
 }

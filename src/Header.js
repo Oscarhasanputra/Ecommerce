@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 function Header(props) {
   const [profil, setprofil] = useState({});
   const [orderDetail, setorderDetail] = useState([]);
+  const [isLogin, setisLogin] = useState(localStorage.getItem("login"))
   const navigate = useNavigate();
   // const [dataModal, setdataModal] = useState({});
 
@@ -35,13 +36,15 @@ function Header(props) {
 
     const getProfil = async () => {
       const profil = await props.contract.wallets(props.wallet);
-
+      console.log("get profil")
+      console.log(profil)
+      console.log(props.wallet)
       setprofil({ photo: profil.photo, name: profil });
     };
     const getContract = async () => {
-      const isLogin = localStorage.getItem("login");
+      
       try {
-        console.log("get contract....")
+       
         const myContract = await ConnectBlockchain(isLogin);
         
         if(isLogin){
@@ -51,13 +54,15 @@ function Header(props) {
           const balance = ethers.utils.formatEther(accountBalance.toString());
   
           props.updateBalance(balance);
+        }else{
+          props.updateBalance(null);
         }
       
         // const exchangeInfo = await axios.get(
         //   "https://api.binance.com/api/v1/ticker/24hr?symbol=BNBBIDR"
         // );
 
-        props.contractReducers.setPrice(4351650)
+        props.contractReducers.setPrice(3751650)
         // props.contractReducers.setPrice(parseInt(exchangeInfo.data.lastPrice));
         props.updateContract(myContract);
       } catch (error) {
@@ -79,7 +84,7 @@ function Header(props) {
     // const getNotif=async()=>{
     //   const notif= await Save.get("")
     // }
-  }, [props.wallet]);
+  }, [props.wallet,isLogin]);
   const goTo = (url) => {
     console.log("click url", url);
     navigate(url);
@@ -257,6 +262,7 @@ function Header(props) {
                               props.updateContract(contract);
 
                               localStorage.removeItem("login");
+                              setisLogin(false);
 
                               props.updateBalance(null);
                             })
@@ -287,6 +293,7 @@ function Header(props) {
                                 accountBalance.toString()
                               );
                               props.updateBalance(balance);
+                              setisLogin(true)
                             })
                             .catch((err) => {});
                         }}
@@ -389,7 +396,7 @@ function Header(props) {
         <div
           id="layoutDrawer_content"
           onClick={(e) => {
-            e.preventDefault();
+            // e.preventDefault();
             // if (window.innerWidth >= 992) {
             //   return;
             // }
@@ -401,9 +408,9 @@ function Header(props) {
           {/* <!-- Main page content--> */}
           <main>
             {/* <!-- Page header--> */}
-            <header className="masthead bg-dark">
+            {/* <header className="masthead bg-dark">
               <div className="container-xl px-5"></div>
-            </header>
+            </header> */}
 
             <Outlet />
           </main>

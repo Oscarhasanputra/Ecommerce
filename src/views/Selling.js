@@ -132,6 +132,7 @@ function Selling() {
           src={file}
           onChange={onChangeFile}
           type="file"
+      
           onDragOver={onDragFile}
           onDragEnd={onDragEnd}
           onDrop={onDrop}

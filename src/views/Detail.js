@@ -52,8 +52,10 @@ function Detail(props) {
   useEffect(() => {
     const getProduct = async () => {
       const contract = props.contract.myContract;
+     
       try {
         const detailProduct = await contract.productDetail(id);
+        
         const { category, description, name, owner, photo, price, productID } =
           detailProduct;
 
@@ -70,15 +72,18 @@ function Detail(props) {
 
         Save.get("/product/" + id)
           .then((res) => {
-            setproduct({ ...dataProduct, rating: res.rating });
+            setproduct({ ...dataProduct, rating: res.rating, txid:res.txid});
             // console.log(res);
           })
           .catch((err) => {});
 
         setproduct(dataProduct);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error)
+      }
     };
-    getProduct();
+    if(props.contract.myContract)
+      getProduct();
     axios
       .get("/comments", { params: { product_id: id } })
       .then((res) => {
@@ -91,7 +96,7 @@ function Detail(props) {
     // }).catch(err=>{
 
     // })
-  }, []);
+  }, [props.contract]);
   // console.log(product);
   const onAddCart = async () => {
     const cart = props.cart;
@@ -164,14 +169,16 @@ function Detail(props) {
 
         
         <div className="d-flex flex-row justify-content-center">
-        <div
+        <a
+            href={"https://testnet.bscscan.com/tx/"+product.txid}
             className="w-100 px-4 my-2 align-items-center text-center text-white btn-success btn-rounded shadow "
-            style={{ color: "#018AD7", cursor: "pointer" }}
-            onClick={() => showModal}
+            style={{ color: "#018AD7", cursor: "pointer",textDecoration:"none" }}
+            // onClick={() => showModal}
+            target="_blank"
           >
 
             Scan Data Blockchain
-          </div>
+          </a>
         </div>
         {props.wallet && !(props.wallet == product.owner) && props.profil.name && (
           <div

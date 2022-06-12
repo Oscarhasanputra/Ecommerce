@@ -136,6 +136,7 @@ function Dashboard(prop) {
             ></object>
           </div>
           <div className="text-center title-2"> Selling Item</div>
+          
           <div className="text-center">
             Feel free register your own products and publiced it to everyone
           </div>
@@ -174,7 +175,8 @@ function Dashboard(prop) {
         </Link>
       </div>
 
-      <h1 className="mt-5 title-1"> Recently Added</h1>
+      <h1 className="mt-5 title-1"> Recently Added </h1>
+      
       <hr className="mb-5 mt-0" />
       <div className="row gx-5 justify-content-center justify-content-sm-between">
         {loadCard()}

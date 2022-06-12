@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,createRef } from "react";
 import Save from "../utils/save";
 import $ from "jquery";
 import { useSelector } from "react-redux";
 import { validate } from "../utils/validate";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Loader } from "../utils/loader";
 
 function ProfileEdit() {
   const [data, setdata] = useState({
-      name:"",
-      email:"",
-      profesi:""
+    name: "",
+    email: "",
+    profesi: "",
   });
   const contract = useSelector(
     (session) => session.ContractReducers.contract.myContract
@@ -18,27 +19,29 @@ function ProfileEdit() {
   const wallet = useSelector(
     (session) => session.ContractReducers.contract.wallet
   );
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [file, setfile] = useState(null);
   const [imageDroped, setimageDroped] = useState(null);
-  
-  useEffect(() => {
+  const fileUpload = createRef()
 
-    const getProfile=async()=>{
-      const {email,name,photo,profesi} = await contract.wallets(wallet);
-      setdata({email,name,photo,profesi})
-  }
-  if(wallet)
-    getProfile()
-  else{
-    alert("Login Metamask First!")
-    navigate("/");
-  }
-  }, [])
-  
-  const onUploadPhoto = () => {
-    $("#fileupload").trigger("click");
+  useEffect(() => {
+    const getProfile = async () => {
+      const { email, name, photo, profesi } = await contract.wallets(wallet);
+      setdata({ email, name, photo, profesi });
+    };
+    if (wallet) getProfile();
+    else {
+      alert("Login Metamask First!");
+      navigate("/");
+    }
+  }, []);
+
+  const onUploadPhoto = (e) => {
+    // e.preventDefault();
+    fileUpload.current.click()
+    // $("#dropdownMenuProfile").click("click");
   };
+
   const onDragFile = (evt) => {
     return false;
   };
@@ -83,23 +86,33 @@ function ProfileEdit() {
         });
         return;
       }
-      if(!file){
+      if (!file) {
         Swal.fire({
-            title: "Your Image Still Empty",
-            text: "Please Upload an Image of Yours First!",
-            icon: "error",
-            timer: 1000,
-          });
+          title: "Your Image Still Empty",
+          text: "Please Upload an Image of Yours First!",
+          icon: "error",
+          timer: 1000,
+        });
         return;
       }
 
       Save.post("/user/upload", form)
-        .then(async(res) => {
+        .then(async (res) => {
           const { images } = res;
-          await contract.registerAccount(data.name,images, data.email, data.profesi);
-          navigate(0)
+          Loader.show("Initializing Wallet for Confirmation....")
+          const tx = await contract.registerAccount(
+            data.name,
+            images,
+            data.email,
+            data.profesi
+          );
+          Loader.show("Updating Data Profil to Blockchain....")
+          await tx.wait()
+          navigate(0);
         })
-        .catch((err) => {navigate(0)});
+        .catch((err) => {
+          navigate(0);
+        });
     }
   };
   return (
@@ -111,6 +124,7 @@ function ProfileEdit() {
             className="file-dropped-area"
             accept="image/*"
             id="fileupload"
+            ref={fileUpload}
             src={file}
             onChange={onChangeFile}
             type="file"
@@ -122,11 +136,10 @@ function ProfileEdit() {
             className="img-card-circle align-self-center"
             src={data.photo ? data.photo : "/assets/images/profilTest.png"}
           ></img>
-          <span className="bg-success d-inline">
+          <span className="bg-success d-inline" onClick={onUploadPhoto}>
             <i
               className="material-icons align-self-center p-3"
               style={{ cursor: "pointer" }}
-              onClick={onUploadPhoto}
             >
               add_a_photo
             </i>

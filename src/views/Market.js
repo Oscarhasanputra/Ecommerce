@@ -47,7 +47,7 @@ const MarketProduct = ({ showModal, product }) => {
   // console.log(product)
   useEffect(() => {
     const getDetailContract = async () => {
-      if (contract) {
+      
         const detailProduct = await contract.productDetail(products.id);
 
         if (detailProduct) {
@@ -59,12 +59,12 @@ const MarketProduct = ({ showModal, product }) => {
           products.photo = photo;
           products.category = category;
           products.price = price.toNumber();
-
-          setproducts(products);
+          
+          setproducts({...products});
         }
-      }
     };
-    getDetailContract();
+    if(contract)
+      getDetailContract();
   }, [contract]);
 
   const favorite = () => {
@@ -194,7 +194,7 @@ const MarketProduct2 = ({ showModal, product }) => {
   const sessionReducer = useSelector((session) => session.ContractReducers);
   useEffect(() => {
     const getDetailContract = async () => {
-      if (contract) {
+      // if (contract) {
         const detailProduct = await contract.productDetail(products.id);
 
         if (detailProduct) {
@@ -207,11 +207,15 @@ const MarketProduct2 = ({ showModal, product }) => {
           products.category = category;
           products.price = price.toNumber();
 
-          setproducts(products);
+          
+          setproducts({...products});
         }
-      }
+      // }
     };
+    if(contract)
     getDetailContract();
+
+    
 
     // Save.get("/product/" + product.id).then((res) => {
     //   product = { ...product, rating: res.rating };
@@ -343,8 +347,8 @@ function Market(props) {
           search,
         });
         setdataProduct(products);
-        if (props.contract) {
-          const contract = props.contract;
+        // if (props.contract) {
+        //   const contract = props.contract;
 
           // products.map(async (prod, index) => {
           //   const detailProduct = await contract.productDetail(prod.id);
@@ -362,7 +366,7 @@ function Market(props) {
           //     setdataProduct([...products]);
           //   }
           // });
-        }
+        // }
         // setstatusData(true)
       } catch (error) {}
     };
@@ -382,8 +386,9 @@ function Market(props) {
       startIndex,
       startIndex + itemPerPage
     );
+    
     const maxCount = Math.floor(productsLoaded.length / perRowCount);
-    // console.log(maxCount);
+   
     for (let i = 0; i < maxCount; i++) {
       const start = i * perRowCount;
       cards.push(
