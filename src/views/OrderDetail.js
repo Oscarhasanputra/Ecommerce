@@ -368,7 +368,7 @@ function OrderDetail() {
             Claim
           </div>
         )}
-        {order.status == "Waiting" && calculateDays(order.createdAt) >= 3 && order.buyer_id == session.wallet (
+        {order.status == "Waiting" && calculateDays(order.createdAt) >= 3 && order.buyer_id == session.wallet && (
           <button
             className="btn btn-success d-flex flex-row align-self-end "
             onClick={() => refund(order.price)}
