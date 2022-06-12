@@ -12,6 +12,7 @@ const checkoutOrder = async (req, res) => {
         orders_id: order.getDataValue("id"),
         status: order.getDataValue("status"),
         gas: data[index].gas,
+        txid:data[index].txid,
       };
     });
     // const values = orderData.dataValues;
@@ -39,6 +40,7 @@ const updateOrder = async (req, res) => {
       orders_id: data.id,
       status: data.status,
       gas: data.gas ? data.gas : 0,
+      txid:data.txid?data.txid:"",
     });
 
     if (save.getDataValue("status") == "Confirmation")

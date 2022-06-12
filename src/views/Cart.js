@@ -257,6 +257,8 @@ const Cart = (props) => {
           price: feeProduct,
           txid: tx.hash,
         });
+        Loader.show("Payment Product...")
+        await tx.wait()
       } else {
         Swal.fire({
           title: "Invalid Format Email",
