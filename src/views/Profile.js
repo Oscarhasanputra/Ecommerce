@@ -246,7 +246,7 @@ const OrderRow = ({ order, index, setmodalShow }) => {
               Feedback
             </button>
           )}
-          {order.status == "Waiting" && calculateDays(order.createdAt) >= 7 && (
+          {order.status == "Waiting" && calculateDays(order.createdAt) >= 3 && (
             <button
               className="btn btn-success"
               onClick={() => refund(order.price)}
