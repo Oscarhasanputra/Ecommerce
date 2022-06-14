@@ -57,7 +57,7 @@ export const ConnectBlockchain = (bool) =>
         } catch (error) {
           // console.log(error);
           rej(error);
-          alert("Failed Login to Wallet and Try to Refresh Page");
+          alert("Failed Connect to Wallet and Try to Refresh Page");
         }
       } else {
         provider = new WalletConnectProvider({
@@ -103,7 +103,7 @@ export const ConnectBlockchain = (bool) =>
         } catch (error) {
           // console.log(error);
           rej(error);
-          alert("Failed Login to Wallet and Try to Refresh Page");
+          alert("Failed Connect to Wallet and Try to Refresh Page");
         }
         // end else
       }

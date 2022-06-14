@@ -14,7 +14,7 @@ function ProtectedRoute({ validated, path, Component, ...props }) {
     
     if (contract.myContract) {
       if (!contract.myContract || !contract.wallet) {
-        alert("Login Metamask Firs!");
+        alert("Connect Your Wallet First!");
         navigate("/");
       } else {
         if (contract.profil && !contract.profil.name) {
