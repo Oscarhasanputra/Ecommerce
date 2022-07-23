@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import Moment from "moment"
 const CardNotif = ({ text, data, ...props }) => {
   const wallet = useSelector(
     (session) => session.ContractReducers.contract.wallet
@@ -29,7 +30,7 @@ const CardNotif = ({ text, data, ...props }) => {
     <div className="card rounded-3 p-5 shadow my-5 btn-overlay">
       {(data.readStatus==null || (data.readStatus.search(wallet)<0)) && <span className="" style={{top:-20,left:10,maxWidth:"fit-content",padding:"10px 50px"}}>New</span>}
       <div className="d-flex flex-row justify-content-between">
-        <div className="title-barlow-2">Info, {data.createdAt}</div>
+        <div className="title-barlow-2">Info, {Moment(data.createdAt).fromNow()}</div>
         <div className="title-noto-2 fw-bold">
           {data.status}
           {/* 0.06581343

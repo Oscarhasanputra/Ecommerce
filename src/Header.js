@@ -10,6 +10,7 @@ import Save from "./utils/save";
 import {  connect } from "react-redux";
 import axios from "axios";
 import { ethers } from "ethers";
+import Moment from "moment"
 function Header(props) {
   const [profil, setprofil] = useState({});
   const [orderDetail, setorderDetail] = useState([]);
@@ -136,14 +137,21 @@ function Header(props) {
             >
               info
             </i>
-            . {val.createdAt}
+            . {Moment(val.createdAt).fromNow()}
           </div>
           <div className="title-noto-3 text-line-1 w-100">{text}</div>
         </Dropdown.Item>
       );
     });
   };
-
+  const loadNotifLength = ()=>{
+    let sizeNotif = 0;
+    orderDetail.forEach((val,index)=>{
+      sizeNotif += val.readStatus.search(props.wallet)<0 ? 1 : 0;
+    })
+    return sizeNotif;
+  }
+  
   return (
     <div>
       <nav className="top-app-bar navbar navbar-expand navbar-dark bg-dark">
@@ -189,7 +197,7 @@ function Header(props) {
                   size="lg"
                 >
                   <i className="material-icons">notifications</i>
-                  <span>{orderDetail.length}</span>
+                  <span>{loadNotifLength()}</span>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>

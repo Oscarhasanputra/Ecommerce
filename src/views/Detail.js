@@ -6,6 +6,7 @@ import Save from "../utils/save";
 import { ConnectBlockchain } from "../utils/SmartContractCaller";
 import { ethers } from "ethers";
 import axios from "axios";
+import Moment from "moment";
 const ImageLoader = ({ photo }) => {
   if (photo == null) {
     return (
@@ -24,15 +25,23 @@ const ImageLoader = ({ photo }) => {
     );
   }
 };
-const CommentCard = ({ comment, person }) => {
+const CommentCard = ({ comment, person,date }) => {
   return (
     <div className="card my-3 shadow-sm" style={{ padding: 0 }}>
-      <div className="card-header">
-        {" "}
-        <i className="material-icons mx-1" style={{ verticalAlign: "middle" }}>
-          person
-        </i>
-        {person}
+      <div className="card-header d-flex flex-row">
+       
+          <i
+            className="material-icons mx-1"
+            style={{ verticalAlign: "middle" }}
+          >
+            person
+          </i>
+          <div className="d-flex flex-column flex-md-row justify-content-md-between w-100">
+
+          <span className="text-line-1 fw-bold">{person}</span>
+            <div className="mt-2 mt-md-0">{Moment(date).fromNow()}</div>
+          </div>
+        
       </div>
       <div className="card-body">{comment}</div>
     </div>
@@ -43,7 +52,6 @@ function Detail(props) {
   const [email, setemail] = useState("");
   const [product, setproduct] = useState({});
   const [comment, setcomment] = useState("");
-  const [dataComment, setdataComment] = useState([]);
   const showModal = () => {
     setshow(true);
   };
@@ -55,7 +63,7 @@ function Detail(props) {
 
       try {
         const detailProduct = await contract.productDetail(id);
-
+        // console.log(detailProduct)
         const { category, description, name, owner, photo, price, productID } =
           detailProduct;
 
@@ -67,13 +75,18 @@ function Detail(props) {
           owner,
           price: price.toNumber(),
           photo,
-          productID,
+          id,
         };
 
         Save.get("/product/" + id)
           .then((res) => {
-            setproduct({ ...dataProduct, rating: res.rating, txid: res.txid });
-            // //console.log(res);
+            setproduct({
+              ...dataProduct,
+              rating: res.rating,
+              txid: res.txid,
+              comments: res.comments,
+            });
+            // console.log(res);
           })
           .catch((err) => {});
 
@@ -83,13 +96,7 @@ function Detail(props) {
       }
     };
     if (props.contract.myContract) getProduct();
-    axios
-      .get("/comments", { params: { product_id: id } })
-      .then((res) => {
-        const dataComments = res.data.data;
-        setdataComment(dataComments);
-      })
-      .catch((err) => {});
+
     // Save.get("/comments",{data:{product_id:1231}}).then(res=>{
     // //console.log(res)
     // }).catch(err=>{
@@ -100,8 +107,9 @@ function Detail(props) {
   const onAddCart = async () => {
     const cart = props.cart;
     // //console.log(props.wallet)
+    console.log(product);
     const data = {
-      product_id: product.productID.toNumber(),
+      product_id: product.id,
       user_id: props.wallet,
       owner_id: product.owner,
     };
@@ -119,7 +127,7 @@ function Detail(props) {
     const contract = props.contract.myContract;
     const data = {
       text: comment,
-      product_id: product.productID.toNumber(),
+      product_id: product.id,
       user_id: props.wallet,
     };
     Save.post("/comments", { data })
@@ -134,10 +142,11 @@ function Detail(props) {
   };
   const loadCommentCard = () => {
     // const commentCard= [];
-    if (product.comment) {
-      const commentCard = dataComment.map((val, index) => {
+    // console.log(product)
+    if (product.comments) {
+      const commentCard = product.comments.map((val, index) => {
         return (
-          <CommentCard key={index} comment={val.text} person={val.user_id} />
+          <CommentCard key={index} comment={val.text} person={val.user_id} date={val.createdAt}/>
         );
       });
       return commentCard;
@@ -221,16 +230,17 @@ function Detail(props) {
           </div>
         )}
 
-        {product.name && <div className="title-1 text-center text-md-start">{product.name}</div>}
+        {product.name && (
+          <div className="title-1 text-center text-md-start">
+            {product.name}
+          </div>
+        )}
 
         {product.name && (
           <div className="font-nato d-flex flex-column flex-sm-row justify-content-start">
             <div className="d-flex flex-row my-1">
               <span className="material-icons me-1">account_circle</span>{" "}
-              <span className="text-line-1">
-
-              {product.owner}
-              </span>
+              <span className="text-line-1">{product.owner}</span>
             </div>
 
             {/* {product.owner && product.user.name} */}

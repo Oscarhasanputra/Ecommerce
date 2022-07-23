@@ -1,4 +1,4 @@
-const { user, products } = require("../model/index");
+const { user, products,comments } = require("../model/index");
 const multer = require("multer");
 const path = require("path");
 const { includes } = require("../webpack.config");
@@ -73,7 +73,8 @@ const getProduct = (req, res) => {
     .findOne({
       where: {
         id,
-      }
+      },
+      include: [{ model: comments }],
     })
     .then((modelProd) => {
       if (modelProd) {

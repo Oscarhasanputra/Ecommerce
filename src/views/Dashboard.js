@@ -74,6 +74,9 @@ function Dashboard(prop) {
   const contract = useSelector(
     (state) => state.ContractReducers.contract.myContract
   );
+  const wallet = useSelector(
+    (state)=>state.ContractReducers.contract.wallet
+  )
   const goTo = (url) => {
     navigate(url);
 
@@ -82,7 +85,7 @@ function Dashboard(prop) {
   useEffect(() => {
     const getProduct = async () => {
       try {
-        const productsData = await Save.get("/products");
+        const productsData = await Save.get("/products",{filter:"id,desc",});
 
         const product = productsData.slice(0, 6);
 

@@ -18,7 +18,7 @@ const ImageLoader = ({ photo }) => {
   } else {
     return (
       <img
-        className={"col-8 col-md-3 img-cart" + (photo == null && "skeleton")}
+        className={"m-auto col-8 col-md-3 img-cart" + (photo == null && "skeleton")}
         src={photo && "/assets/" + photo}
       ></img>
     );

@@ -36,7 +36,7 @@ export const ConnectBlockchain = (bool) =>
           const networkID = await provider.request({ method: "net_version" });
           
           provider = new ethers.providers.Web3Provider(provider);
-  
+          await provider.send('eth_requestAccounts', []);
           const signer = provider.getSigner();
           const address = await signer.getAddress();
   
@@ -52,7 +52,7 @@ export const ConnectBlockchain = (bool) =>
         } catch (error) {
           console.log(error)
           rej(error);
-          alert("Failed Connecsst to Wallet and Try to Refresh Page");
+          alert("Failed Connect to Wallet and Try to Refresh Page");
         }
       } else {
         provider = new WalletConnectProvider({

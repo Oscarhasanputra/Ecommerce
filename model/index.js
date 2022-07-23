@@ -19,6 +19,7 @@ order.belongsTo(user,{foreignKey:"buyer_id",as:"buyer"})
 
 order.hasMany(orderDetail,{foreignKey:"orders_id"})
 orderDetail.belongsTo(order,{foreignKey:"orders_id"})
+products.hasMany(comments,{foreignKey:"product_id"})
 // order.belongsToMany(user,{through:"buyer",foreignKey:"buyer_id"})
 
 module.exports={user, product,order,orderDetail,cart,products,comments}

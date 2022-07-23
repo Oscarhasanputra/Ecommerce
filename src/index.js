@@ -18,7 +18,7 @@ import "bootstrap/dist/js/bootstrap.js"
 //   state.updateSessionTime(new Date())
 // }
 // axios.defaults.baseURL="http://localhost:8000/api"
-axios.defaults.baseURL="https://comercy.site/api"
+axios.defaults.baseURL="/api"
 
 
 // ConnectBlockchain(isLogin).then(async contract=>{

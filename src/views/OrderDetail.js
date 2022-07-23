@@ -7,6 +7,7 @@ import { ethers } from "ethers";
 import Swal from "sweetalert2";
 import Save from "../utils/save";
 import axios from "axios";
+import Moment from "moment"
 const ImageLoader = ({ photo }) => {
   if (photo == null) {
     return (
@@ -53,7 +54,7 @@ const HistoryCard = ({ text, date, status, txid }) => {
       </span>
       <div className="d-flex flex-column justify-content-center">
         <div className="font-noto text-line-3">{text}</div>
-        <div className="text-muted my-1">{date}</div>
+        <div className="text-muted my-1">{Moment(date).fromNow()}</div>
       </div>
       {(status == "Waiting" || status == "Claimed" || status == "Refund") && (
         <a
@@ -397,6 +398,7 @@ function OrderDetail() {
             <div className=" row">
               <div className="col-sm-3 col-md-5 col-lg-7"></div>
               <div className="ms-sm-4 ms-md-6 col-12 col-sm-8 col-md-6 col-lg-4 d-flex flex-column p-4 rounded ">
+              <hr></hr>
                 <div className="fw-bolder title-2">PRICE DETAIL</div>
                 <hr></hr>
                 <div className="d-flex flex-row justify-content-between">
