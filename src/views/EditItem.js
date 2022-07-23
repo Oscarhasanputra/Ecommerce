@@ -60,8 +60,8 @@ function EditItem() {
   const onDrop = (evt) => {
     evt.preventDefault();
     const file = evt.dataTransfer.files[0];
-    // console.log(file)
-    // console.log()
+    // //console.log(file)
+    // //console.log()
     uploadedChange(file);
   };
 

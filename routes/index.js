@@ -7,7 +7,7 @@ router.get("/",(req,res,next)=>{
   let state={}
   if(req.session.Login)
     state={isLogin:true, data:req.session.data}
-  console.log(state);
+  //console.log(state);
   return res.render("index",{state: JSON.stringify(state)})
 
 })

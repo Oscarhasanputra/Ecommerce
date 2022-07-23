@@ -44,7 +44,7 @@ const MarketProduct = ({ showModal, product }) => {
     (session) => session.ContractReducers.contract.myContract
   );
   const sessionReducer = useSelector((session) => session.ContractReducers);
-  // console.log(product)
+  // //console.log(product)
   useEffect(() => {
     const getDetailContract = async () => {
       
@@ -352,7 +352,7 @@ function Market(props) {
 
           // products.map(async (prod, index) => {
           //   const detailProduct = await contract.productDetail(prod.id);
-          //   console.log(contract)
+          //   //console.log(contract)
           //   if (detailProduct) {
           //     const { productID, name, owner, photo, price, category } =
           //       detailProduct;
@@ -453,7 +453,7 @@ function Market(props) {
   };
   const onAddCart = async () => {
     const cart = props.cart;
-    // console.log(props.wallet)
+    // //console.log(props.wallet)
     const data = {
       product_id: dataModal.id,
       user_id: props.wallet,

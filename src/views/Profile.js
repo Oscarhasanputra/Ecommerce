@@ -31,7 +31,7 @@ const ProfileDraft = ({ ...props }) => {
           setshow(false)
         })
         .catch((err) => {
-          console.log("");
+          //console.log("");
         });
     }
   }, [wallet]);
@@ -43,12 +43,12 @@ const ProfileDraft = ({ ...props }) => {
     const contract = useSelector(
       (session) => session.ContractReducers.contract.myContract
     );
-    // console.log(product)
+    // //console.log(product)
     useEffect(() => {
       isMounted.current = true;
       const getDetail = async () => {
         const detailProduct = await contract.productDetail(product.id);
-        // console.log(detailProduct)
+        // //console.log(detailProduct)
         if (detailProduct && isMounted.current) {
           const { photo } = detailProduct;
           setproducts({ ...products, photo });
@@ -185,7 +185,7 @@ const OrderRow = ({ order, index, setmodalShow }) => {
     return diffDays;
   };
   const refund = (price) => {
-    // console.log(order)
+    // //console.log(order)
     Swal.fire({
       title: "Refund Your Payment Product",
       text: "Your Payment Fee is About " + price + " BNB",
@@ -222,7 +222,7 @@ const OrderRow = ({ order, index, setmodalShow }) => {
               navigate(0);
             });
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
     });
@@ -302,12 +302,12 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
               navigate(0);
             });
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
     });
   };
-  console.log(selling)
+  //console.log(selling)
   return (
     <tr>
       <th scope="row">{index}</th>

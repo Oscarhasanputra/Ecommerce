@@ -41,8 +41,8 @@ const parseIncomingRequest = (clientRequest, clientResponse) => {
   //     searchParams:
   //     path: "/",
   //   };
-  console.log("parse incoming request");
-  console.log(index)
+  //console.log("parse incoming request");
+  //console.log(index)
   executeRequest(options, clientRequest, clientResponse);
 };
 
@@ -62,11 +62,11 @@ const executeRequest = (options, clientRequest, clientResponse) => {
         }
       )
       .then((res) => {
-        // console.log(res)
+        // //console.log(res)
         clientResponse.send(res.data);
       })
       .catch((err) => {
-        console.log(err)
+        //console.log(err)
         index = (index+1) < 3?index+1:0;
         executeRequest(options,clientRequest,clientResponse)
         // clientResponse.send(err);
@@ -77,7 +77,7 @@ const executeRequest = (options, clientRequest, clientResponse) => {
 
 // app.
 if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+  //console.log(`Master ${process.pid} is running`);
 
   // Fork workers.
   for (let i = 0; i < numCPUs; i++) {
@@ -86,17 +86,17 @@ if (cluster.isMaster) {
 
   //Check if work id is died
   cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
+    //console.log(`worker ${worker.process.pid} died`);
   });
 
 }else{
-  console.log(`Worker ${process.pid} started`);
+  //console.log(`Worker ${process.pid} started`);
   const server = http.createServer(app);
   app.use(parseIncomingRequest);
   // app.use(createProxyMiddleware({ target: 'https://data-seed-prebsc-1-s1.binance.org:8545/', changeOrigin: true }))
   
   server.listen(8088, () => {
-    console.log("Proxy Server listening on Port 8088");
+    //console.log("Proxy Server listening on Port 8088");
   });
 }
 

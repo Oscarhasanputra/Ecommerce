@@ -36,18 +36,24 @@ const HistoryCard = ({ text, date, status, txid }) => {
       "%)"
     );
   };
+  const color = getColor();
   return (
-    <div className="card p-3 my-3 flex-row">
+    <div
+      className="card p-3 my-3 flex-row"
+      style={{
+        boxShadow: "3px 2px 10px " + color,
+      }}
+    >
       <span
-        className="align-self-start rounded-circle p-3 text-uppercased title-2"
-        style={{ backgroundColor: getColor() }}
+        className="align-self-center rounded-circle p-3 text-uppercased title-2"
+        style={{ backgroundColor: color }}
       >
         {" "}
         TX{" "}
       </span>
       <div className="d-flex flex-column justify-content-center">
-        <div className="font-noto">{text}</div>
-        <div className="text-muted">{date}</div>
+        <div className="font-noto text-line-3">{text}</div>
+        <div className="text-muted my-1">{date}</div>
       </div>
       {(status == "Waiting" || status == "Claimed" || status == "Refund") && (
         <a
@@ -81,10 +87,10 @@ function OrderDetail() {
         .then((res) => {
           // const dataOrder = res.data.myorder[0];
 
-          // console.log("hello")
+          // //console.log("hello")
 
           const dataOrder = res.data[0];
-          // console.log("panggil1")
+          // //console.log("panggil1")
           // const [{...readStatus}] = detailOrderUpdate;
           //update reading status order detail
           try {
@@ -107,7 +113,7 @@ function OrderDetail() {
                 .catch((err) => {});
             }
           } catch (error) {
-            console.log(error);
+            //console.log(error);
           }
 
           const productID = dataOrder.product_id;
@@ -115,8 +121,8 @@ function OrderDetail() {
           contract
             .productDetail(productID)
             .then(async (data) => {
-              // console.log(data);
-              // console.log(data);
+              // //console.log(data);
+              // //console.log(data);
               const { photo, name, owner, category } = data;
               const seller = await contract.wallets(owner);
               const sellerDetail = seller.name ? seller.name : owner;
@@ -131,7 +137,7 @@ function OrderDetail() {
               });
             })
             .catch((err) => {});
-          // console.log(dataOrder);
+          // //console.log(dataOrder);
           setorder(dataOrder);
         })
         .catch((err) => {});
@@ -149,7 +155,7 @@ function OrderDetail() {
           : status == "Confirmation"
           ? "Confirmed the Order and has sent Email to " +
             order.email +
-            "by Seller"
+            " by Seller"
           : status == "Finished"
           ? "Order Successfully Accepted by buyer and Payment has been paid"
           : status == "Refund"
@@ -186,7 +192,7 @@ function OrderDetail() {
     return diffDays;
   };
   const refund = (price) => {
-    // console.log(order)
+    // //console.log(order)
     const contract = session.myContract;
     Swal.fire({
       title: "Refund Your Payment Product",
@@ -224,7 +230,7 @@ function OrderDetail() {
               navigate(0);
             });
         } catch (error) {
-          console.log(error);
+          //console.log(error);
         }
       }
     });
@@ -268,21 +274,26 @@ function OrderDetail() {
       }
     });
   };
+  const totalGas = order.orders_details && order.orders_details.reduce((a, b) => {
+    return { gas: a.gas + b.gas };
+  }).gas ;
 
   return (
     <div className="container-xl p-5">
       <div className="card rounded-3 shadow-sm p-4">
-        <div className="d-flex flex-row justify-content-between">
-          <div className="title-2">No. Order : {id}</div>
-          <div className="title-2 ">Status : {order.status}</div>
+        <div className="d-flex flex-column flex-sm-row justify-content-between">
+          <div className="title-2 my-2">No. Order : {id}</div>
+          <div className="title-2 my-2">Status : {order.status}</div>
         </div>
-        <div className="title-2 my-2">
-          {" "}
-          Invoice No : {session.wallet}
-          {id}
+        <div className="title-2 my-2 text-line-1">
+          Invoice No :
+          <span className="title-2 text-line-1">
+            {session.wallet}
+            {id}
+          </span>
         </div>
-        <div className="d-flex flex-row mt-4">
-          <div className="p-2 rounded order-image">
+        <div className="d-flex flex-column justify-content-center justify-content-sm-start flex-sm-row mt-4">
+          <div className="p-2 rounded order-image align-self-center mb-4">
             <ImageLoader photo={detail.photo} />
             {/* <img
               src={"/assets/" + detail.photo}
@@ -305,22 +316,25 @@ function OrderDetail() {
 
           {detail.name && (
             <div className="mx-3 d-flex flex-column justify-content-between">
-              <div className="title-2">{detail.name}</div>
+              <div className="title-2 text-center text-sm-start">
+                {detail.name}
+              </div>
 
-              <div>
-                Qty : 1
-                <span className="mx-4">
-                  {" "}
+              <div className="d-flex flex-column mt-2 flex-sm-row justify-content-between">
+                <div className="align-self-center">Qty : 1</div>
+                <div className="align-self-center">
                   Price : <span className="d-inline-block">{order.price} </span>
                   <img src="/assets/images/BNB.png" height="30" />
-                </span>
+                </div>
               </div>
 
-              <div>
-                Email Buyer :{" "}
-                <span className="d-inline-block">{order.email}</span>
+              <div className="text-center text-sm-start">
+                <span className="d-none d-sm-inline">Email Buyer :</span>
+                <span className="d-inline-block text-line-1">
+                  {order.email}
+                </span>
               </div>
-              <div className="font-nato d-flex">
+              <div className="font-nato d-flex justify-content-center justify-content-sm-start my-2">
                 <span className="material-icons align-self-center me-1 text-primary">
                   account_circle
                 </span>{" "}
@@ -368,14 +382,46 @@ function OrderDetail() {
             Claim
           </div>
         )}
-        {order.status == "Waiting" && calculateDays(order.createdAt) >= 3 && order.buyer_id == session.wallet && (
-          <button
-            className="btn btn-success d-flex flex-row align-self-end "
-            onClick={() => refund(order.price)}
-          >
-            Refund
-          </button>
-        )}
+        {order.status == "Waiting" &&
+          calculateDays(order.createdAt) >= 3 &&
+          order.buyer_id == session.wallet && (
+            <button
+              className="btn btn-success d-flex flex-row align-self-end "
+              onClick={() => refund(order.price)}
+            >
+              Refund
+            </button>
+          )}
+        {(order.status == "Claimed" || order.status == "Refund") &&
+          order.orders_details && (
+            <div className=" row">
+              <div className="col-sm-3 col-md-5 col-lg-7"></div>
+              <div className="ms-sm-4 ms-md-6 col-12 col-sm-8 col-md-6 col-lg-4 d-flex flex-column p-4 rounded ">
+                <div className="fw-bolder title-2">PRICE DETAIL</div>
+                <hr></hr>
+                <div className="d-flex flex-row justify-content-between">
+                  <div className="fw-bold">Sub Total</div>
+
+                  <div className="fw-bold">{order.price} BNB</div>
+                </div>
+                <div className="d-flex flex-row justify-content-between my-2 mb-3">
+                  <div className="text-muted">Total Gas Fee</div>
+
+                  <div className="fw-bold">
+                    {
+                      totalGas
+                    } BNB
+                  </div>
+                </div>
+                <hr className=""></hr>
+                <div className="d-flex flex-row justify-content-between mb-4">
+                  <div className="fw-bolder">Total Amount</div>
+
+                  <div className="fw-bold">{totalGas + order.price} BNB</div>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     </div>
   );

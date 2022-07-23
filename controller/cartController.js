@@ -9,7 +9,7 @@ const getCartByWallet=async(req,res)=>{
 const addCartItem=async(req,res)=>{
     const {data}=req.body;
     try {
-    console.log(data)
+    //console.log(data)
     const cartData=await cart.create(data)
     res
         .status(200)

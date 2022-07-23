@@ -29,16 +29,16 @@ function Header(props) {
           params: { user_id: props.wallet },
         });
         const orderDetail = res.data;
-        console.log(orderDetail)
+        //console.log(orderDetail)
         setorderDetail(orderDetail);
       } catch (error) {}
     };
 
     const getProfil = async () => {
       const profil = await props.contract.wallets(props.wallet);
-      console.log("get profil")
-      console.log(profil)
-      console.log(props.wallet)
+      //console.log("get profil")
+      //console.log(profil)
+      //console.log(props.wallet)
       setprofil({ photo: profil.photo, name: profil });
     };
     const getContract = async () => {
@@ -67,7 +67,7 @@ function Header(props) {
         props.updateContract(myContract);
       } catch (error) {
 
-        console.log(error)
+        //console.log(error)
       }
     };
 
@@ -86,7 +86,7 @@ function Header(props) {
     // }
   }, [props.wallet,isLogin]);
   const goTo = (url) => {
-    console.log("click url", url);
+    //console.log("click url", url);
     navigate(url);
   };
   const loadNotification = () => {

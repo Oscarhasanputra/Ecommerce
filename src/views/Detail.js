@@ -52,10 +52,10 @@ function Detail(props) {
   useEffect(() => {
     const getProduct = async () => {
       const contract = props.contract.myContract;
-     
+
       try {
         const detailProduct = await contract.productDetail(id);
-        
+
         const { category, description, name, owner, photo, price, productID } =
           detailProduct;
 
@@ -72,18 +72,17 @@ function Detail(props) {
 
         Save.get("/product/" + id)
           .then((res) => {
-            setproduct({ ...dataProduct, rating: res.rating, txid:res.txid});
-            // console.log(res);
+            setproduct({ ...dataProduct, rating: res.rating, txid: res.txid });
+            // //console.log(res);
           })
           .catch((err) => {});
 
         setproduct(dataProduct);
       } catch (error) {
-        console.log(error)
+        //console.log(error);
       }
     };
-    if(props.contract.myContract)
-      getProduct();
+    if (props.contract.myContract) getProduct();
     axios
       .get("/comments", { params: { product_id: id } })
       .then((res) => {
@@ -92,15 +91,15 @@ function Detail(props) {
       })
       .catch((err) => {});
     // Save.get("/comments",{data:{product_id:1231}}).then(res=>{
-    // console.log(res)
+    // //console.log(res)
     // }).catch(err=>{
 
     // })
   }, [props.contract]);
-  // console.log(product);
+  // //console.log(product);
   const onAddCart = async () => {
     const cart = props.cart;
-    // console.log(props.wallet)
+    // //console.log(props.wallet)
     const data = {
       product_id: product.productID.toNumber(),
       user_id: props.wallet,
@@ -161,22 +160,24 @@ function Detail(props) {
       })
       .catch((err) => {});
   };
-  // console.log(props.profil);
+  // //console.log(props.profil);
   return (
     <div className="container-xl p-5 row">
       <div className="col-12 col-md-5">
         {<ImageLoader photo={product.photo} />}
 
-        
         <div className="d-flex flex-row justify-content-center">
-        <a
-            href={"https://testnet.bscscan.com/tx/"+product.txid}
+          <a
+            href={"https://testnet.bscscan.com/tx/" + product.txid}
             className="w-100 px-4 my-2 align-items-center text-center text-white btn-success btn-rounded shadow "
-            style={{ color: "#018AD7", cursor: "pointer",textDecoration:"none" }}
+            style={{
+              color: "#018AD7",
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
             // onClick={() => showModal}
             target="_blank"
           >
-
             Scan Data Blockchain
           </a>
         </div>
@@ -184,7 +185,7 @@ function Detail(props) {
           <div
             className="w-100 mt-3 py-2 px-5 text-white btn-primary btn-rounded shadow-lg text-center"
             style={{ color: "#018AD7", cursor: "pointer" }}
-            onClick={() => showModal}
+            onClick={() => showModal()}
           >
             Add To Cart
           </div>
@@ -220,19 +221,23 @@ function Detail(props) {
           </div>
         )}
 
-        {product.name && <div className="title-1">{product.name}</div>}
+        {product.name && <div className="title-1 text-center text-md-start">{product.name}</div>}
 
         {product.name && (
-          <div className="font-nato d-flex">
-            <span className="material-icons align-self-center me-1">
-              account_circle
-            </span>{" "}
-            {product.owner}
+          <div className="font-nato d-flex flex-column flex-sm-row justify-content-start">
+            <div className="d-flex flex-row my-1">
+              <span className="material-icons me-1">account_circle</span>{" "}
+              <span className="text-line-1">
+
+              {product.owner}
+              </span>
+            </div>
+
             {/* {product.owner && product.user.name} */}
-            <span className="material-icons align-self-center ms-5 me-1">
-              favorite
-            </span>{" "}
-            {product.rating}
+            <div className="d-flex flex-row my-1">
+              <span className="material-icons ms-sm-5 me-1">favorite</span>
+              {product.rating}
+            </div>
           </div>
         )}
         {product.name && (

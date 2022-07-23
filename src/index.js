@@ -18,7 +18,7 @@ import "bootstrap/dist/js/bootstrap.js"
 //   state.updateSessionTime(new Date())
 // }
 // axios.defaults.baseURL="http://localhost:8000/api"
-axios.defaults.baseURL="/api"
+axios.defaults.baseURL="https://comercy.site/api"
 
 
 // ConnectBlockchain(isLogin).then(async contract=>{
@@ -27,7 +27,7 @@ axios.defaults.baseURL="/api"
   const store = createStore(reducer)
 //   const state= store.getState()
 //   if(isLogin){
-//     console.log(isLogin)
+//     //console.log(isLogin)
 
     // const accountBalance = await contract.provider.getBalance(contract.wallet)
     // const balance = ethers.utils.formatEther(accountBalance.toString())
@@ -47,10 +47,10 @@ axios.defaults.baseURL="/api"
     document.getElementById("root")
   );
 //   } catch (error) {
-//     console.log(error)
+//     //console.log(error)
 //   }
   
 // }).catch(err=>{
-//   console.log(err)
+//   //console.log(err)
 // })
 

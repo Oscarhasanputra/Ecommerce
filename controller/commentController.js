@@ -20,7 +20,7 @@ const addComments=async(req,res)=>{
 
 const getComment=async(req,res)=>{
     const {product_id} = req.query;
-    console.log(product_id)
+    //console.log(product_id)
     try {
         const dataComments= await comments.findAll({where:{product_id}})
         res.status(200)

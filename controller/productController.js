@@ -38,10 +38,10 @@ const getAllProduct = async (req, res) => {
       }
     });
 
-    console.log(data);
+    //console.log(data);
     dataProduct.push(...data);
   } catch (error) {
-    console.log(error)
+    //console.log(error)
   }
   res.json(dataProduct);
 };
@@ -53,8 +53,8 @@ const uploadFileHandler = async (req, res) => {
 };
 const getProductByOwner=async(req,res)=>{
   const {wallet} = req.query;
-  console.log("owner addres")
-  console.log(wallet)
+  //console.log("owner addres")
+  //console.log(wallet)
   try {
     const data= await products.findAll({
       where:{owner:wallet}
@@ -68,7 +68,7 @@ const getProductByOwner=async(req,res)=>{
 }
 const getProduct = (req, res) => {
   const id = req.params.id;
-  console.log(id);
+  //console.log(id);
   products
     .findOne({
       where: {
@@ -82,7 +82,7 @@ const getProduct = (req, res) => {
       res.status(404).json({ message: "Product Not Found" });
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
 
       res.status(404).json({ message: "Product Not Found" });
     });
@@ -116,12 +116,12 @@ const giveRating=async(req,res)=>{
 
 const createProduct=async(req,res)=>{
   const {data} =req.body;
-  console.log(data)
+  //console.log(data)
   try {
       const dataProduct=await products.create(data);
       res.status(200).json({dataProduct});
   } catch (error) {
-      console.log(error)
+      //console.log(error)
       res.status(400)
   }
 }

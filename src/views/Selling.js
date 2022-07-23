@@ -25,7 +25,7 @@ function Selling() {
   useEffect(() => {}, []);
 
   const onDragFile = (evt) => {
-    console.log(productData.file);
+    //console.log(productData.file);
     return false;
   };
   const onDragEnd = (evt) => {
@@ -50,8 +50,8 @@ function Selling() {
   const onDrop = (evt) => {
     evt.preventDefault();
     const file = evt.dataTransfer.files[0];
-    // console.log(file)
-    // console.log()
+    // //console.log(file)
+    // //console.log()
     uploadedChange(file);
   };
 
@@ -83,9 +83,9 @@ function Selling() {
 
             Loader.show("Saving Data Product to Blockchain....")
             const rc=await tx.wait()
-            // console.log("response tx")
-            // console.log(rc)
-            // console.log(id)
+            // //console.log("response tx")
+            // //console.log(rc)
+            // //console.log(id)
             await Save.post("/product", {
               data: {id, name, price, category ,owner:session.wallet,txid:tx.hash},
             });

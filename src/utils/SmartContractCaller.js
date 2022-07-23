@@ -13,12 +13,7 @@ export const ConnectBlockchain = (bool) =>
 
     if (bool) {
       if (provider) {
-        // sleep(10000).then(() => {
-        //   const network = provider.network;
-        //   if (!network) {
-        //     alert("Please Using your VPN First for better experience");
-        //   }
-        // });
+        
         try {
           // change network to bsc testnet
           await provider.request({
@@ -50,14 +45,14 @@ export const ConnectBlockchain = (bool) =>
             MyContract.abi,
             signer
           );
-          console.log(myContract)
+          //(myContract)
           const profil = await myContract.wallets(address);
           res({ myContract, wallet: address, provider, profil });
           return;
         } catch (error) {
-          // console.log(error);
+          console.log(error)
           rej(error);
-          alert("Failed Connect to Wallet and Try to Refresh Page");
+          alert("Failed Connecsst to Wallet and Try to Refresh Page");
         }
       } else {
         provider = new WalletConnectProvider({
@@ -101,11 +96,11 @@ export const ConnectBlockchain = (bool) =>
           res({ myContract, wallet: address, provider, profil });
           return;
         } catch (error) {
-          // console.log(error);
+          
           rej(error);
           alert("Failed Connect to Wallet and Try to Refresh Page");
         }
-        // end else
+        
       }
     } else {
       const networkID = 97;
@@ -131,6 +126,5 @@ export const ConnectBlockchain = (bool) =>
         rej(error);
       }
 
-      // return;
     }
   });

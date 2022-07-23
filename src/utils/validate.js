@@ -10,8 +10,8 @@ export const validate=(classname=null)=>{
         
         const elem=elements[i]
         const value= elem.value
-        console.log("validating")
-        console.log(elem)
+        //console.log("validating")
+        //console.log(elem)
         if(value =="" || value == null){
             Swal.fire({
                 title:"Your "+elem.title +" Still Empty",

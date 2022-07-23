@@ -25,13 +25,13 @@ router.put("/products/:id",Product.updateProduct)
 router.post("/uploadfiles",(req,res,next)=>{
     Product.upload.single("file")(req,res,(err)=>{
         if (err instanceof multer.MulterError) {
-            console.log("error multer")
-            console.log(err)
+            //console.log("error multer")
+            //console.log(err)
             return res.send(500);
             // A Multer error occurred when uploading.
         } else if (err) {
-            console.log("error not multer")
-            console.log(err)
+            //console.log("error not multer")
+            //console.log(err)
             return res.send(500)
             // An unknown error occurred when uploading.
         }

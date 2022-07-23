@@ -3,7 +3,7 @@ const { Sequelize, Op } = require("sequelize");
 
 const checkoutOrder = async (req, res) => {
   const data = req.body;
-  // console.log(data)
+  // //console.log(data)
   try {
     // orderDetail.bulkCreate()
     const orderData = await order.bulkCreate(data);
@@ -15,8 +15,8 @@ const checkoutOrder = async (req, res) => {
         txid:data[index].txid,
       };
     });
-    console.log("order")
-    console.log(orderDetailData)
+    //console.log("order")
+    //console.log(orderDetailData)
     // const values = orderData.dataValues;
     await orderDetail.bulkCreate(orderDetailData);
     // await orderDetail.create({ orders_id: values.id, status: values.status });
@@ -25,7 +25,7 @@ const checkoutOrder = async (req, res) => {
         "Checkout the Product has Completed, Waiting for the Response from Seller",
     });
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     return res
       .status(400)
       .json({ message: "Found a Mistake While you were Checkout" });
@@ -63,7 +63,7 @@ const updateOrder = async (req, res) => {
         message:" You are successfully Refund back into Your Wallet"
       })
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json({ message: " Found Mistake while you send Response" });
   }
 };
@@ -105,11 +105,11 @@ const getDetailOrder = async (req, res) => {
     //     },
     //   ],
     // });
-    console.log("working");
-    console.log(orderData);
+    //console.log("working");
+    //console.log(orderData);
     res.json(orderData);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json({ message: "Unauthorized User" });
   }
 };
@@ -133,7 +133,7 @@ const getAllMyOrderDetail = async (req, res) => {
     order.update()
     res.json(orderDetailData);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400);
   }
 };
@@ -149,9 +149,9 @@ const getAllMyOrderNotif = async (req, res) => {
       },
     });
     const orderIds = orderData.map((val, index) => val.id);
-    console.log("notification mine")
-    console.log(orderIds);
-    console.log(user_id)
+    //console.log("notification mine")
+    //console.log(orderIds);
+    //console.log(user_id)
     const orderDetailData = await orderDetail.findAll({
       where: {
         orders_id: orderIds,
@@ -168,10 +168,10 @@ const getAllMyOrderNotif = async (req, res) => {
       order: [["id", "DESC"]],
       include: [{ model: order, as: "order" }],
     });
-    console.log(orderDetailData)
+    //console.log(orderDetailData)
     res.json(orderDetailData);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400);
   }
 };
@@ -185,7 +185,7 @@ const getMyOrder = async (req, res) => {
     
     res.json({ myOrder, mySelling });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json({ message: "not found order" });
   }
 };
@@ -194,7 +194,7 @@ const updateReadOrderDetail = async (req, res) => {
   
   const {data} =req.body;
   try {
-    console.log(data)
+    //console.log(data)
     data.map((orderdet,index)=>{
         orderDetail.update({readStatus:orderdet.readStatus},{
           where:{id:orderdet.id}
@@ -203,7 +203,7 @@ const updateReadOrderDetail = async (req, res) => {
     res.status(200)
     // res.json(orderDetailData);
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400);
   }
 };

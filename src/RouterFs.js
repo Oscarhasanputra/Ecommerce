@@ -55,8 +55,8 @@ const Notification = loadable({
 
 export default function RouterFs() {
   // const wallet=null;
-  console.log("hello world");
-  // console.log(session.isAuth())
+  //console.log("hello world");
+  // //console.log(session.isAuth())
   return (
     <BrowserRouter basename="/">
       <Routes>

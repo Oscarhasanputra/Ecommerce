@@ -175,8 +175,9 @@ input[type="file"].file-dropped-area{
 }
 
 .order-image {
-  border: #bfbebe 1px solid;
+  // border: #bfbebe 1px solid;
   background-color: #e7e7e7 !important;
+  box-shadow: 3px 2px 10px rgba($color: #272727, $alpha: 0.4)
 }
 .circle-outlined {
   border: 3px solid #6200ea;

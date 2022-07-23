@@ -4,14 +4,14 @@ const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(file)
+    //console.log(file)
 
     cb(null, path.join(__dirname, "..", "public", "assets", "profile"));
    
   },
   filename: (req, file, cb) => {
 
-    console.log("error uploading 2")
+    //console.log("error uploading 2")
     const fileName = Date.now() + path.extname(file.originalname);
     req.body.images = "/assets/profile/" + fileName;
 

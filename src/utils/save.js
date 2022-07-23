@@ -35,7 +35,7 @@ class Save{
                     resolve(data)
             }).catch(err=>{
                 
-                console.log("hiding")
+                //console.log("hiding")
                 Loader.hide()
                 if(err.response && err.response.data && err.response.data.message){
                     SweetAlert.fire({
@@ -45,7 +45,7 @@ class Save{
                         timer:1000
                     }).then(()=>{
 
-                console.log("hiding")
+                //console.log("hiding")
                         reject(err)
                     })
                 }else

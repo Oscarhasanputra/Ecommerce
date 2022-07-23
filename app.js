@@ -36,7 +36,7 @@ app.use(cookieParser());
 
 
 // app.use("/assets",(req,res,next)=>{
-//   console.log("helloooo.....")
+//   //console.log("helloooo.....")
 //   next()
 // })
 // const encodeResToGzip = contentType => (req, res, next) => {
@@ -63,7 +63,7 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  console.log("no url founded")
+  //console.log("no url founded")
   next(createError(404));
 });
 

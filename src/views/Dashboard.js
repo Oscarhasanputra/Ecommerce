@@ -93,7 +93,7 @@ function Dashboard(prop) {
             const detailProduct = await contract.productDetail(prod.id);
            
             // if (detailProduct) {
-              // console.log(contract)
+              // //console.log(contract)
               const { id, name, owner, photo, price } = detailProduct;
 
               prod.price = price.toNumber();
@@ -101,7 +101,7 @@ function Dashboard(prop) {
               prod.owner = owner;
               prod.name = prod.name;
 
-              //   console.log(detailProduct);
+              //   //console.log(detailProduct);
               setproducts([...product]);
             // }
 
