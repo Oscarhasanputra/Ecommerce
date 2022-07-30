@@ -79,7 +79,8 @@ export default function RouterFs() {
             element={
               //
 
-              <Chat />
+
+              <ProtectedRoute Component={ <Chat />}></ProtectedRoute>
             }
           ></Route>
           <Route
@@ -87,7 +88,8 @@ export default function RouterFs() {
             element={
               //
 
-              <Chat />
+              <ProtectedRoute Component={ <Chat />}></ProtectedRoute>
+             
             }
           ></Route>
 
