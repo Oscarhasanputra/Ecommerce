@@ -61,7 +61,7 @@ function Header(props) {
   
           props.updateBalance(balance);
           if(!props.socket){
-            const socket = io("http://localhost:8000");
+            const socket = io("https://comercy.site");
             socket.emit("add-user", myContract.wallet);
          
             props.addSocket(socket);
