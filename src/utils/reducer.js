@@ -56,3 +56,48 @@ export const NotifReducers = (state = [], action) => {
 
   return state;
 };
+export const ChatListReducers = (state = [], action) => {
+  switch (action.type) {
+    case "chatInit":
+      state = action.keys
+      // action.data;
+      return state;
+    case "addChat":
+      state = [action.key,...state]
+      return state;
+    default:
+      return state;
+  }
+
+  return state;
+};
+
+export const ChatReducers = (state = {}, action) => {
+  switch (action.type) {
+    case "contact":
+      state = action.data;
+      // action.data;
+      return state;
+    case "addContact":
+      state[action.key]=action.contact;
+      return {...state};
+    default:
+      return state;
+  }
+
+  return state;
+};
+
+export const SocketReducers = (state = null , action) => {
+  switch (action.type) {
+    case "socket":
+      state = action.socket;
+      // action.data;
+      return state;
+    default:
+      return state;
+  }
+
+  return state;
+};
+

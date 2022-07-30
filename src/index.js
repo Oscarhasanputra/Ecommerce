@@ -7,7 +7,7 @@ import RouterFs from "./RouterFs";
 import axios from "axios";
 import {Provider} from "react-redux"
 import {combineReducers, createStore} from "redux";
-import {ContractReducers,CartReducers,NotifReducers,BalanceReducers} from "./utils/reducer"
+import {ContractReducers,CartReducers,NotifReducers,BalanceReducers,SocketReducers,ChatReducers,ChatListReducers} from "./utils/reducer"
 import "bootstrap/dist/js/bootstrap.js"
 
 
@@ -17,12 +17,12 @@ import "bootstrap/dist/js/bootstrap.js"
 //   state.updateData(window.__state.data);
 //   state.updateSessionTime(new Date())
 // }
-// axios.defaults.baseURL="http://localhost:8000/api"
-axios.defaults.baseURL="/api"
+axios.defaults.baseURL="http://localhost:8000/api"
+// axios.defaults.baseURL="/api"
 
 
 // ConnectBlockchain(isLogin).then(async contract=>{
-  const reducer= combineReducers({ContractReducers,CartReducers,NotifReducers,BalanceReducers})
+  const reducer= combineReducers({ContractReducers,CartReducers,NotifReducers,BalanceReducers,SocketReducers,ChatReducers,ChatListReducers})
   
   const store = createStore(reducer)
 //   const state= store.getState()

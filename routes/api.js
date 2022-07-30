@@ -5,10 +5,19 @@ const Product =require("../controller/productController")
 const Order = require("../controller/orderController")
 const Cart = require("../controller/cartController")
 const Comment = require("../controller/commentController")
+
+const Chat = require("../controller/chatController")
 const multer = require("multer");
 /* GET home page. */
 router.get("/myorder",Order.getMyOrder);
 router.get("/myorder/all",Order.getAllMyOrderDetail);
+
+
+router.get("/contact/:user_id",Chat.getContact)
+router.get("/chat/:id",Chat.getChatUser)
+router.post("/chat",Chat.createChat)
+router.post("/checkRoom",Chat.checkRoomChat)
+
 
 router.get("/myorder/notif",Order.getAllMyOrderNotif);
 router.get("/products",Product.getAllProduct)

@@ -15,17 +15,18 @@ const checkoutOrder = async (req, res) => {
         txid:data[index].txid,
       };
     });
-    //console.log("order")
-    //console.log(orderDetailData)
+    console.log("order")
+    console.log(orderDetailData)
     // const values = orderData.dataValues;
-    await orderDetail.bulkCreate(orderDetailData);
+    const dataOrderDetail = await orderDetail.bulkCreate(orderDetailData);
     // await orderDetail.create({ orders_id: values.id, status: values.status });
     return res.status(200).json({
       message:
         "Checkout the Product has Completed, Waiting for the Response from Seller",
+      data: dataOrderDetail
     });
   } catch (error) {
-    //console.log(error)
+    console.log(error)
     return res
       .status(400)
       .json({ message: "Found a Mistake While you were Checkout" });
@@ -39,7 +40,7 @@ const updateOrder = async (req, res) => {
     orderData.status = data.status;
 
     const save = await orderData.save();
-    await orderDetail.create({
+    const dataOrderDetail=await orderDetail.create({
       orders_id: data.id,
       status: data.status,
       gas: data.gas ? data.gas : 0,
@@ -49,18 +50,24 @@ const updateOrder = async (req, res) => {
     if (save.getDataValue("status") == "Confirmation")
       return res
         .status(200)
-        .json({ message: "Order Confirmation has been sent to buyer" });
+        .json({ message: "Order Confirmation has been sent to buyer" ,
+        data: dataOrderDetail
+      });
     else if (save.getDataValue("status") == "Finished")
       return res
         .status(200)
-        .json({ message: "Feedback Has been sent to Seller" });
+        .json({ message: "Feedback Has been sent to Seller" ,
+        data: dataOrderDetail
+      });
     else if (save.getDataValue("status") == "Claimed")
       return res.status(200).json({
         message: "You are successfully Claiming Fee into Your Wallet",
+        data: dataOrderDetail
       });
     else if (save.getDataValue("status")=="Refund")
       return res.status(200).json({
-        message:" You are successfully Refund back into Your Wallet"
+        message:" You are successfully Refund back into Your Wallet",
+        data: dataOrderDetail
       })
   } catch (error) {
     //console.log(error);

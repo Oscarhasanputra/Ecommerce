@@ -2,13 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Save from "../utils/save";
 import $ from "jquery";
 import { ethers } from "ethers";
-import {
-  Modal,
-  Button,
-  Tab,
-  Nav,
-  Spinner,
-} from "react-bootstrap";
+import { Modal, Button, Tab, Nav, Spinner } from "react-bootstrap";
 import { Loader } from "../utils/loader";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,7 +14,7 @@ const ProfileDraft = ({ ...props }) => {
   );
   const priceBNB = useSelector((session) => session.ContractReducers.price);
   const [data, setdata] = useState([]);
-  const [show, setshow] = useState(true)
+  const [show, setshow] = useState(true);
   useEffect(() => {
     if (wallet) {
       axios
@@ -28,7 +22,7 @@ const ProfileDraft = ({ ...props }) => {
         .then((res) => {
           const dataProduct = res.data.data;
           setdata(dataProduct);
-          setshow(false)
+          setshow(false);
         })
         .catch((err) => {
           //console.log("");
@@ -127,7 +121,7 @@ const ProfileDraft = ({ ...props }) => {
                 className="switch_1"
                 onChange={function (e) {
                   const status = e.target.checked;
-                  
+
                   $(e.target).prop("checked", !status); //
                   const text = status ? "ON" : "OFF";
                   Save.put("/products", products.id, { status: text })
@@ -135,8 +129,6 @@ const ProfileDraft = ({ ...props }) => {
                       $(e.target).prop("checked", status);
                     })
                     .catch(() => {});
-
-                  
                 }}
               />
             </div>
@@ -157,7 +149,7 @@ const ProfileDraft = ({ ...props }) => {
   return (
     <div className="mt-5 row justify-content-center">
       {loadCard()}
-      {show && <Spinner animation="border" size="lg"/>}
+      {show && <Spinner animation="border" size="lg" />}
       {data.length <= 0 && !show && (
         <div className="d-flex align-items-center flex-column justify-content-center">
           <i className="material-icons text-danger" style={{ fontSize: 100 }}>
@@ -175,6 +167,8 @@ const OrderRow = ({ order, index, setmodalShow }) => {
   );
   const priceBNB = useSelector((session) => session.ContractReducers.price);
   const navigate = useNavigate();
+  const session = useSelector((state) => state.ContractReducers.contract);
+  const Socket = useSelector((state) => state.SocketReducers);
 
   const calculateDays = (dateOrder) => {
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
@@ -199,10 +193,10 @@ const OrderRow = ({ order, index, setmodalShow }) => {
         const weiPrice = ethers.utils.parseUnits(price.toString(), "ether");
         const weiPriceStr = weiPrice.toString();
         try {
-          Loader.show("Initializing Wallet for Confirmation....")
+          Loader.show("Initializing Wallet for Confirmation....");
           const tx = await contract.refund(order.seller_id, weiPriceStr);
-          Loader.show("Refund Saldo to your Wallet...")
-          await tx.wait()
+          Loader.show("Refund Saldo to your Wallet...");
+          await tx.wait();
           const gasLimit = tx.gasLimit.toNumber();
           const gasPrice = ethers.utils.formatEther(tx.gasPrice.toNumber());
           const totalFee = (gasLimit * gasPrice).toFixed(8);
@@ -211,11 +205,24 @@ const OrderRow = ({ order, index, setmodalShow }) => {
             id: order.id,
             status: "Refund",
             gas: totalFee,
-            txid:tx.hash
+            txid: tx.hash,
           })
             .then((res) => {
+              const responseData = res.data;
+              if (responseData) {
+                const targetAddress =
+                  order.buyer_id == session.wallet
+                    ? order.seller_id
+                    : order.buyer_id;
+                const dataMsg = {
+                  to: targetAddress,
+                  order: [responseData],
+                };
+                console.log(dataMsg)
+                Socket.emit("send-notif", dataMsg);
+              }
               Loader.hide();
-              navigate(0);
+              // navigate(0);
             })
             .catch((err) => {
               Loader.hide();
@@ -265,6 +272,8 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
   );
   const priceBNB = useSelector((session) => session.ContractReducers.price);
   const navigate = useNavigate();
+  const session = useSelector((state) => state.ContractReducers.contract);
+  const Socket = useSelector((state) => state.SocketReducers);
   const onClaim = async (price) => {
     Swal.fire({
       title: "Claiming Your Payment Product",
@@ -279,9 +288,9 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
         const weiPrice = ethers.utils.parseUnits(price.toString(), "ether");
         const weiPriceStr = weiPrice.toString();
         try {
-          Loader.show("Initializing Wallet for Confirmation....")
+          Loader.show("Initializing Wallet for Confirmation....");
           const tx = await contract.withdraw(weiPriceStr);
-          Loader.show(" Claim Saldo to your Wallet...")
+          Loader.show(" Claim Saldo to your Wallet...");
           await tx.wait();
           const gasLimit = tx.gasLimit.toNumber();
           const gasPrice = ethers.utils.formatEther(tx.gasPrice.toNumber());
@@ -291,9 +300,22 @@ const SellingRow = ({ selling, index, setmodalSell }) => {
             id: selling.id,
             status: "Claimed",
             gas: totalFee,
-            txid:tx.hash
+            txid: tx.hash,
           })
             .then((res) => {
+              const responseData = res.data;
+              if (responseData) {
+                const targetAddress =
+                  selling.buyer_id == session.wallet
+                    ? selling.seller_id
+                    : selling.buyer_id;
+                const dataMsg = {
+                  to: targetAddress,
+                  order: [responseData],
+                };
+
+                Socket.emit("send-notif", dataMsg);
+              }
               Loader.hide();
               navigate(0);
             })
@@ -347,6 +369,8 @@ function Profile() {
   const [profil, setprofil] = useState({});
   const [modalShow, setmodalShow] = useState(false);
   const [modalSell, setmodalSell] = useState(false);
+
+  const Socket = useSelector((state) => state.SocketReducers);
   const address = useSelector(
     (state) => state.ContractReducers.contract.wallet
   );
@@ -362,7 +386,7 @@ function Profile() {
       const { email, name, photo, profesi } = await contract.wallets(address);
       setprofil({ email, name, photo, profesi });
     };
-    
+
     if (address != null) {
       getProfile();
       axios
@@ -414,6 +438,19 @@ function Profile() {
   const onConfirm = (status) => {
     Save.post("/order/confirm", { id: dataModal.id, status })
       .then((res) => {
+        const responseData = res.data;
+        if (responseData) {
+          const targetAddress =
+            dataModal.buyer_id == address
+              ? dataModal.seller_id
+              : dataModal.buyer_id;
+          const dataMsg = {
+            to: targetAddress,
+            order: [responseData],
+          };
+
+          Socket.emit("send-notif", dataMsg);
+        }
         Loader.hide();
         navigate(0);
       })

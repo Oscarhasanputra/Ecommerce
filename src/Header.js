@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ConnectBlockchain } from "./utils/SmartContractCaller";
 import {
@@ -9,6 +9,7 @@ import {
 import Save from "./utils/save";
 import {  connect } from "react-redux";
 import axios from "axios";
+import {io} from "socket.io-client"
 import { ethers } from "ethers";
 import Moment from "moment"
 function Header(props) {
@@ -16,6 +17,9 @@ function Header(props) {
   const [orderDetail, setorderDetail] = useState([]);
   const [isLogin, setisLogin] = useState(localStorage.getItem("login"))
   const navigate = useNavigate();
+  const listChat = useRef([])
+  const refOrderDetail =useRef([])
+  const listContact = useRef({})
   // const [dataModal, setdataModal] = useState({});
 
   useEffect(async () => {
@@ -31,6 +35,7 @@ function Header(props) {
         });
         const orderDetail = res.data;
         //console.log(orderDetail)
+        refOrderDetail.current = orderDetail;
         setorderDetail(orderDetail);
       } catch (error) {}
     };
@@ -55,6 +60,14 @@ function Header(props) {
           const balance = ethers.utils.formatEther(accountBalance.toString());
   
           props.updateBalance(balance);
+          if(!props.socket){
+            const socket = io("http://localhost:8000");
+            socket.emit("add-user", myContract.wallet);
+         
+            props.addSocket(socket);
+          }
+          
+          
         }else{
           props.updateBalance(null);
         }
@@ -74,7 +87,18 @@ function Header(props) {
 
     if (props.wallet) {
       getCart();
-
+      axios.get("/contact/"+props.wallet).then(res=>{
+        const data = res.data;
+        const contacts= {}
+        const chatList = data.map((room,index)=>{
+          contacts[room.id]=room
+          return room.id;
+        })
+        props.addChatInit(contacts)
+        props.addChatList(chatList)
+        listChat.current=chatList;
+        listContact.current=contacts;
+      })
       getMyOrder();
 
       getProfil();
@@ -86,6 +110,62 @@ function Header(props) {
     //   const notif= await Save.get("")
     // }
   }, [props.wallet,isLogin]);
+
+  useEffect(()=>{
+    listChat.current=props.chatList;
+  },[props.chatList])
+  
+  useEffect(()=>{
+    if(props.socket){
+      
+      props.socket.on("msg-recieve",(data)=>{
+        const listOfChatContact = listChat.current;
+       
+        if(!(listOfChatContact.includes(data.room_id))){
+          
+            listChat.current= [data.room_id,...listChat.current]
+            const date = new Date()
+            const contact = {
+              id:data.room_id,
+              chats:[{
+                createdAt:date,
+                message:data.msg,
+                user_target:data.to
+              }],
+              createdAt:date,
+              updatedAt:date,
+              user_id:`${data.from},${data.to},`,
+              newChats:[{
+                createdAt:date,
+                message:data.msg,
+                user_target:data.to
+              }]
+            }
+            listContact.current[data.room_id]= contact;
+            props.addContact(data.room_id,contact)
+            props.addChat(data.room_id)
+            
+        }else{
+            console.log(listContact.current)
+            const date = new Date()
+            const contact_target = listContact.current[data.room_id];
+            contact_target.newChats.push({message:data.msg,user_target:data.to,updatedAt:date,createdAt:date});
+            contact_target.chats = [{updatedAt:date,createdAt:date,message:data.msg,user_target:data.to}]
+            listContact.current[data.room_id]= contact_target;
+            
+            props.addContact(data.room_id,contact_target)
+        }
+          
+      })
+
+      props.socket.on("msg-notif",(data)=>{
+        refOrderDetail.current= [...data.order,...refOrderDetail.current]
+        setorderDetail(refOrderDetail.current)
+      })
+    }
+   
+  },[props.socket])
+ 
   const goTo = (url) => {
     //console.log("click url", url);
     navigate(url);
@@ -126,7 +206,7 @@ function Header(props) {
           style={{ height: "auto" }}
           onClick={(e) => {
             e.preventDefault();
-            goTo(`/order/${val.order.id}`);
+            goTo(`/order/${val.orders_id}`);
           }}
           key={index}
         >
@@ -146,10 +226,19 @@ function Header(props) {
   };
   const loadNotifLength = ()=>{
     let sizeNotif = 0;
+    
     orderDetail.forEach((val,index)=>{
-      sizeNotif += val.readStatus.search(props.wallet)<0 ? 1 : 0;
+      sizeNotif += val.readStatus && val.readStatus.search(props.wallet)>=0 ? 0 : 1;
     })
     return sizeNotif;
+  }
+  const loadNewChatsLength = ()=>{
+    let counts=0;
+    props.chatList.map((chatID,index)=>{
+        const contact = props.chatContact[chatID];
+        counts += contact.newChats.length
+    })
+    return counts;
   }
   
   return (
@@ -190,6 +279,11 @@ function Header(props) {
                 aria-expanded="false"
               >
               </button> */}
+              <Link className="btn btn-lg btn-icon mx-2 btn-overlay d-none d-md-block" to="/chat">
+                <i className="material-icons">sms</i>
+                <span>{loadNewChatsLength()}</span>
+              </Link>
+
               <Dropdown>
                 <Dropdown.Toggle
                   id="dropdown-basic"
@@ -220,6 +314,7 @@ function Header(props) {
                 <i className="material-icons">shopping_cart</i>
                 <span>{props.cart.length}</span>
               </Link>
+            
 
               <div className="dropdown">
                 <button
@@ -506,7 +601,10 @@ const mapToProps = (state) => {
     provider: state.ContractReducers.contract.provider,
     contract: state.ContractReducers.contract.myContract,
     cart: state.CartReducers,
+    socket:state.SocketReducers,
     notif: state.NotifReducers,
+    chatList : state.ChatListReducers,
+    chatContact : state.ChatReducers
   };
 };
 const dispatchToProps = (dispatch) => {
@@ -526,6 +624,21 @@ const dispatchToProps = (dispatch) => {
     updateBalance: (price) => {
       dispatch({ type: "balance", price });
     },
+    addSocket : (socket)=>{
+      dispatch({type:"socket",socket})
+    },
+    addChatList: (chatID)=>{
+      dispatch({type:"chatInit",keys:chatID})
+    },
+    addChat : (chatID)=>{
+      dispatch({type:"addChat",key:chatID})
+    },
+    addChatInit : (data)=>{
+      dispatch({type:"contact",data})
+    },
+    addContact : (chatID,contact)=>{
+      dispatch({type:"addContact",key:chatID,contact})
+    }
   };
 };
 export default connect(mapToProps, dispatchToProps)(Header);

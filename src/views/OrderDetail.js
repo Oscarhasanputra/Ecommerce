@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "../utils/loader";
 import { Spinner } from "react-bootstrap";
 import { ethers } from "ethers";
 import Swal from "sweetalert2";
 import Save from "../utils/save";
 import axios from "axios";
-import Moment from "moment"
+import Moment from "moment";
 const ImageLoader = ({ photo }) => {
   if (photo == null) {
     return (
@@ -78,6 +78,10 @@ function OrderDetail() {
 
   const [order, setorder] = useState({});
   const [detail, setdetail] = useState({});
+  const dispatch = useDispatch();
+  const Socket = useSelector((state) => state.SocketReducers);
+  const ChatListReducers = useSelector((state) => state.ChatListReducers);
+  const ChatReducers = useSelector((state) => state.ChatReducers);
   useEffect(() => {
     const wallet = session.wallet;
     const contract = session.myContract;
@@ -176,6 +180,17 @@ function OrderDetail() {
   const onConfirm = (status) => {
     Save.post("/order/confirm", { id: order.id, status })
       .then((res) => {
+        const responseData = res.data 
+       
+        if(responseData){
+          const targetAddress = order.buyer_id == session.wallet ? order.seller_id : order.buyer_id;
+          const dataMsg={
+            to:targetAddress,
+            order:[responseData]
+           }
+
+          Socket.emit("send-notif",dataMsg)
+        }
         Loader.hide();
         navigate(0);
       })
@@ -223,6 +238,16 @@ function OrderDetail() {
             txid: tx.hash,
           })
             .then((res) => {
+              const responseData = res.data;
+              if(responseData){
+                const targetAddress = order.buyer_id == session.wallet ? order.seller_id : order.buyer_id;
+                const dataMsg={
+                  to:targetAddress,
+                  order:[responseData]
+                 }
+      
+                Socket.emit("send-notif",dataMsg)
+              }
               Loader.hide();
               navigate(0);
             })
@@ -265,6 +290,16 @@ function OrderDetail() {
           txid: tx.hash,
         })
           .then((res) => {
+            const responseData = res.data;
+            if(responseData){
+              const targetAddress = order.buyer_id == session.wallet ? order.seller_id : order.buyer_id;
+              const dataMsg={
+                to:targetAddress,
+                order:[responseData]
+               }
+    
+              Socket.emit("send-notif",dataMsg)
+            }
             Loader.hide();
             navigate(0);
           })
@@ -275,10 +310,42 @@ function OrderDetail() {
       }
     });
   };
-  const totalGas = order.orders_details && order.orders_details.reduce((a, b) => {
-    return { gas: a.gas + b.gas };
-  }).gas ;
+  const totalGas =
+    order.orders_details &&
+    order.orders_details.reduce((a, b) => {
+      return { gas: a.gas + b.gas };
+    }).gas;
 
+  const goToChatRoom = () => {
+    const ownerAddress =
+      order.buyer_id == session.wallet ? order.seller_id : order.buyer_id;
+
+    axios
+      .post("/checkRoom", {
+        address: session.wallet,
+        user_target: ownerAddress,
+      })
+      .then((res) => {
+        const room = res.data;
+        const listOfChatContact = ChatListReducers;
+        const contacts = ChatReducers;
+        if (!listOfChatContact.includes(room.id)) {
+          room.chats = [];
+          room.newChats = [];
+          dispatch({
+            type: "addContact",
+            key: room.id,
+            contact: room,
+          });
+
+          dispatch({
+            type: "addChat",
+            key: room.id,
+          });
+        }
+        navigate("/chat/" + room.id);
+      });
+  };
   return (
     <div className="container-xl p-5">
       <div className="card rounded-3 shadow-sm p-4">
@@ -294,15 +361,40 @@ function OrderDetail() {
           </span>
         </div>
         <div className="d-flex flex-column justify-content-center justify-content-sm-start flex-sm-row mt-4">
-          <div className="p-2 rounded order-image align-self-center mb-4">
-            <ImageLoader photo={detail.photo} />
-            {/* <img
+          <div className="d-flex flex-column">
+            <div className="p-2 rounded order-image align-self-center mb-4">
+              <ImageLoader photo={detail.photo} />
+
+              {/* <img
               src={"/assets/" + detail.photo}
               height="100"
               width="100"
               className="rounded"
             ></img> */}
+            </div>
+            {order && (
+              <div
+                className="align-self-center py-2 text-white btn-rounded shadow-lg text-center btn-success"
+                style={{ width: "90%", cursor: "pointer" }}
+                onClick={() => goToChatRoom()}
+              >
+                {" "}
+                <span className="d-inline d-sm-none">
+                Chat {order.buyer_id == session.wallet
+                  ? "Seller"
+                  : "Buyer"}{" "}
+                </span>
+             
+                <i
+                  className="material-icons"
+                  style={{ verticalAlign: "middle" }}
+                >
+                  chat
+                </i>
+              </div>
+            )}
           </div>
+
           {!detail.name && (
             <div
               className="mx-3 d-flex flex-column justify-content-between"
@@ -398,7 +490,7 @@ function OrderDetail() {
             <div className=" row">
               <div className="col-sm-3 col-md-5 col-lg-7"></div>
               <div className="ms-sm-4 ms-md-6 col-12 col-sm-8 col-md-6 col-lg-4 d-flex flex-column p-4 rounded ">
-              <hr></hr>
+                <hr></hr>
                 <div className="fw-bolder title-2">PRICE DETAIL</div>
                 <hr></hr>
                 <div className="d-flex flex-row justify-content-between">
@@ -409,11 +501,7 @@ function OrderDetail() {
                 <div className="d-flex flex-row justify-content-between my-2 mb-3">
                   <div className="text-muted">Total Gas Fee</div>
 
-                  <div className="fw-bold">
-                    {
-                      totalGas
-                    } BNB
-                  </div>
+                  <div className="fw-bold">{totalGas} BNB</div>
                 </div>
                 <hr className=""></hr>
                 <div className="d-flex flex-row justify-content-between mb-4">

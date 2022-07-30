@@ -52,6 +52,10 @@ const Notification = loadable({
   loader: () => import("./views/Notifications"),
   loading: LoadingComp,
 });
+const Chat = loadable({
+  loader: () => import("./views/Chat/Chat"),
+  loading: LoadingComp,
+});
 
 export default function RouterFs() {
   // const wallet=null;
@@ -68,6 +72,22 @@ export default function RouterFs() {
               //
 
               <Market />
+            }
+          ></Route>
+          <Route
+            path="/chat/:id"
+            element={
+              //
+
+              <Chat />
+            }
+          ></Route>
+          <Route
+            path="/chat"
+            element={
+              //
+
+              <Chat />
             }
           ></Route>
 

@@ -30,6 +30,7 @@ const CardCart = ({ emailChange, cartItem, ...props }) => {
   );
   const navigate = useNavigate();
   const [cartData, setcartData] = useState(cartItem);
+  
   const priceBNB = useSelector((session) => session.ContractReducers.price);
   useEffect(() => {
     const getDetailProduct = async () => {
@@ -38,6 +39,7 @@ const CardCart = ({ emailChange, cartItem, ...props }) => {
       const wallet = contractReducer.wallet;
       const dataProduct = await contract.productDetail(product_id);
       const profil = await contract.wallets(wallet);
+      
       const data = {
         ...cartData,
         email: profil.email,
@@ -202,6 +204,7 @@ const Cart = (props) => {
   const contract = useSelector(
     (session) => session.ContractReducers.contract.myContract
   );
+  const Socket = useSelector((state) => state.SocketReducers);
   const priceBNB = useSelector((session) => session.ContractReducers.price);
   const navigate = useNavigate();
   const [show, setshow] = useState(false);
@@ -282,13 +285,23 @@ const Cart = (props) => {
 
     Save.post("/product/checkout", dataCartSaved)
       .then(async (res) => {
+        const responseData = res.data;
+        dataCartSaved.map((cart,index) => {
+          const destAddr= cart.seller_id;
+          const dataMsg = {
+            to: destAddr,
+            order: [responseData[index]],
+          };
+          Socket.emit("send-notif", dataMsg);
+        });
+       
         // dataCartSaved.map((val,index)=>{
 
         // })
-        navigate(0);
+        // navigate(0);
       })
       .catch((err) => {
-        navigate(0);
+        // navigate(0);
       });
     // Save.post("/order/checkout",)
   };

@@ -169,6 +169,23 @@ function Detail(props) {
       })
       .catch((err) => {});
   };
+  const goToChatRoom= ()=>{
+    const ownerAddress = product.owner;
+    axios.post("/checkRoom",{address:props.wallet,user_target:ownerAddress}).then(res=>{
+      const room = res.data;
+      const listOfChatContact = props.chatList;
+      const contacts= props.chatContact
+      if(!(listOfChatContact.includes(room.id))){
+        room.chats = [];
+        room.newChats = []
+        props.addContact(room.id,room)
+        props.addChat(room.id);
+        
+      }
+      navigate("/chat/"+room.id)
+      
+    })
+  }
   // //console.log(props.profil);
   return (
     <div className="container-xl p-5 row">
@@ -197,6 +214,15 @@ function Detail(props) {
             onClick={() => showModal()}
           >
             Add To Cart
+          </div>
+        )}
+        {props.wallet && !(props.wallet == product.owner) && props.profil.name && (
+          <div
+            className="w-100 mt-3 py-2 px-5 text-white btn-rounded shadow-lg text-center"
+            style={{ color: "#018AD7", cursor: "pointer", background:"#6204af"}}
+            onClick={() => goToChatRoom()}
+          >
+            Chat <i className="material-icons" style={{verticalAlign:"middle"}}>chat</i>
           </div>
         )}
         {props.wallet && !props.profil.name && (
@@ -338,6 +364,8 @@ const mapToProps = (state) => {
     priceBNB: state.ContractReducers.price,
     profil: state.ContractReducers.contract.profil,
     cart: state.CartReducers,
+    chatList : state.ChatListReducers,
+    chatContact : state.ChatReducers
   };
 };
 const dispatchToProps = (dispatch) => {
@@ -346,6 +374,12 @@ const dispatchToProps = (dispatch) => {
     delete: (index) => dispatch({ type: "delete", index }),
     updateContract: (contract) => dispatch({ type: "update", contract }),
     updateBalance: (price) => dispatch({ type: "balance", price }),
+    addChat : (chatID)=>{
+      dispatch({type:"addChat",key:chatID})
+    },
+    addContact : (chatID,contact)=>{
+      dispatch({type:"addContact",key:chatID,contact})
+    }
   };
 };
 export default connect(mapToProps, dispatchToProps)(Detail);
