@@ -472,9 +472,11 @@ div.skeleton-text{
           height: 3rem;
          
         }
+        border-radius: 50px;
+        background-color: none !important;
         @media screen and (max-width: $chatSize) {
-          background-color: yellow;
-          border-radius: 50px;
+          background-color: none;
+          
           padding: 10px
       }
       }

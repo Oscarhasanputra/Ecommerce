@@ -60,7 +60,7 @@ export default function Contacts({ changeChat }) {
     );
   };
   const loadContactUser = () => {
-    return [...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers].map((key, index) => {
+    return ChatListReducers.map((key, index) => {
       const contact = ChatReducers[key];
 
       return (

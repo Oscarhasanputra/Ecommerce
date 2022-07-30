@@ -575,14 +575,18 @@ div.skeleton-text:last-of-type {
   }
 }
 
+.contact-container .contacts .contact .avatar {
+  border-radius: 50px;
+  background-color: none !important;
+}
+
 .contact-container .contacts .contact .avatar img {
   height: 3rem;
 }
 
 @media screen and (max-width: 900px) {
   .contact-container .contacts .contact .avatar {
-    background-color: yellow;
-    border-radius: 50px;
+    background-color: none;
     padding: 10px;
   }
 }
