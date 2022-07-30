@@ -501,13 +501,17 @@ function OrderDetail() {
                 <div className="d-flex flex-row justify-content-between my-2 mb-3">
                   <div className="text-muted">Total Gas Fee</div>
 
-                  <div className="fw-bold">{totalGas} BNB</div>
+                  {order.status == "Claimed" && <div className="fw-bold">{totalGas} BNB</div>}
+
+                  {order.status == "Refund" && <div className="fw-bold">{"("}{totalGas} BNB {")"}</div>}
                 </div>
                 <hr className=""></hr>
                 <div className="d-flex flex-row justify-content-between mb-4">
                   <div className="fw-bolder">Total Amount</div>
 
-                  <div className="fw-bold">{totalGas + order.price} BNB</div>
+                  {order.status == "Claimed" && <div className="fw-bold">{totalGas + order.price} BNB</div>}
+
+                  {order.status == "Refund" && <div className="fw-bold">{order.price - totalGas} BNB</div>}
                 </div>
               </div>
             </div>
