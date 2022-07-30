@@ -117,7 +117,7 @@ function Detail(props) {
     setshow(false);
     Save.post("/cart", { data })
       .then((res) => {
-        props.add(data);
+        props.add(res.cartItem);
       })
       .catch((err) => {
         props.delete(-1);
