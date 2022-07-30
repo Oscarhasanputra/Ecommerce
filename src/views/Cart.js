@@ -298,10 +298,10 @@ const Cart = (props) => {
         // dataCartSaved.map((val,index)=>{
 
         // })
-        // navigate(0);
+        navigate(0);
       })
       .catch((err) => {
-        // navigate(0);
+        navigate(0);
       });
     // Save.post("/order/checkout",)
   };

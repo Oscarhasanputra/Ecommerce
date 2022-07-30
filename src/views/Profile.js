@@ -218,11 +218,11 @@ const OrderRow = ({ order, index, setmodalShow }) => {
                   to: targetAddress,
                   order: [responseData],
                 };
-                console.log(dataMsg)
+                // console.log(dataMsg)
                 Socket.emit("send-notif", dataMsg);
               }
               Loader.hide();
-              // navigate(0);
+              navigate(0);
             })
             .catch((err) => {
               Loader.hide();
