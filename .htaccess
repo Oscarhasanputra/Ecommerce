@@ -1,0 +1,4 @@
+RewriteEngine on
+
+RewriteCond %{SERVER_PORT} ^8000$
+RewriteRule ^(.*)$ http://127.0.0.1:8000/$1 [P,L]
