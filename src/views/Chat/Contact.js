@@ -128,7 +128,7 @@ export default function Contacts({ changeChat }) {
     <>
       <div className="contact-container">
         <div className="brand">
-          <h3>snappy</h3>
+          <h3>Room Chat</h3>
         </div>
         <div className="contacts">
           {ChatListReducers && ChatListReducers.length > 0 ? loadContactUser() :(
