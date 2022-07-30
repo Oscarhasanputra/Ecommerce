@@ -48,18 +48,32 @@ export default function Contacts({ changeChat }) {
       setCurrentUserImage(photo)
     })
   },[address])
-
+  const getColor = () => {
+    return (
+      "hsl(" +
+      360 * Math.random() +
+      "," +
+      (25 + 70 * Math.random()) +
+      "%," +
+      (80 + 10 * Math.random()) +
+      "%)"
+    );
+  };
   const loadContactUser = () => {
-    return ChatListReducers.map((key, index) => {
+    return [...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers,...ChatListReducers].map((key, index) => {
       const contact = ChatReducers[key];
+
       return (
         <div
           key={index}
           className={`contact ${index === currentSelected ? "selected" : ""}`}
+         
           onClick={() => changeCurrentChat(index, contact)}
         >
         
-          <div className="avatar">
+          <div className="avatar" 
+           style={{backgroundColor:getColor()}}
+          >
             <img
               src={
                 targetUsers[contact.id] && targetUsers[contact.id].photo
@@ -83,7 +97,7 @@ export default function Contacts({ changeChat }) {
             >{contact.newChats.length}</span>}
             </div>
 
-            <div className="d-flex flex-row justify-content-between text-muted my-1">
+            <div className="info-chat d-flex flex-row justify-content-between text-muted my-1">
               <span className="text-line-2 " style={{width:"70%"}}>
               {contact.chats &&
                 contact.chats.length > 0 &&
@@ -118,7 +132,7 @@ export default function Contacts({ changeChat }) {
         </div>
         <div className="contacts">
           {ChatListReducers && ChatListReducers.length > 0 ? loadContactUser() :(
-            <div className= "h-100 d-flex flex-column justify-content-center align-items-center">
+            <div className= "h-100 w-100 d-flex flex-column justify-content-center align-items-center">
               <i
               className="material-icons text-white"
               style={{ verticalAlign: "bottom", fontSize:50}}

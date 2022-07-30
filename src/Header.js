@@ -2,24 +2,21 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
 import { ConnectBlockchain } from "./utils/SmartContractCaller";
-import {
-  Spinner,
-  Dropdown,
-} from "react-bootstrap";
+import { Spinner, Dropdown } from "react-bootstrap";
 import Save from "./utils/save";
-import {  connect } from "react-redux";
+import { connect } from "react-redux";
 import axios from "axios";
-import {io} from "socket.io-client"
+import { io } from "socket.io-client";
 import { ethers } from "ethers";
-import Moment from "moment"
+import Moment from "moment";
 function Header(props) {
   const [profil, setprofil] = useState({});
   const [orderDetail, setorderDetail] = useState([]);
-  const [isLogin, setisLogin] = useState(localStorage.getItem("login"))
+  const [isLogin, setisLogin] = useState(localStorage.getItem("login"));
   const navigate = useNavigate();
-  const listChat = useRef([])
-  const refOrderDetail =useRef([])
-  const listContact = useRef({})
+  const listChat = useRef([]);
+  const refOrderDetail = useRef([]);
+  const listContact = useRef({});
   // const [dataModal, setdataModal] = useState({});
 
   useEffect(async () => {
@@ -48,124 +45,129 @@ function Header(props) {
       setprofil({ photo: profil.photo, name: profil });
     };
     const getContract = async () => {
-      
       try {
-       
         const myContract = await ConnectBlockchain(isLogin);
-        
-        if(isLogin){
+
+        if (isLogin) {
           const accountBalance = await myContract.provider.getBalance(
             myContract.wallet
           );
           const balance = ethers.utils.formatEther(accountBalance.toString());
-  
+
           props.updateBalance(balance);
-          if(!props.socket){
-            const socket = io("https://comercy.site");
+          if (!props.socket) {
+            const socket = io("http://comercy.site/");
             socket.emit("add-user", myContract.wallet);
-         
+
             props.addSocket(socket);
           }
-          
-          
-        }else{
+        } else {
           props.updateBalance(null);
         }
-      
+
         // const exchangeInfo = await axios.get(
         //   "https://api.binance.com/api/v1/ticker/24hr?symbol=BNBBIDR"
         // );
 
-        props.contractReducers.setPrice(3751650)
+        props.contractReducers.setPrice(4404902);
         // props.contractReducers.setPrice(parseInt(exchangeInfo.data.lastPrice));
         props.updateContract(myContract);
       } catch (error) {
-
         //console.log(error)
       }
     };
 
     if (props.wallet) {
       getCart();
-      axios.get("/contact/"+props.wallet).then(res=>{
+      axios.get("/contact/" + props.wallet).then((res) => {
         const data = res.data;
-        const contacts= {}
-        const chatList = data.map((room,index)=>{
-          contacts[room.id]=room
+        const contacts = {};
+        const chatList = data.map((room, index) => {
+          contacts[room.id] = room;
           return room.id;
-        })
-        props.addChatInit(contacts)
-        props.addChatList(chatList)
-        listChat.current=chatList;
-        listContact.current=contacts;
-      })
+        });
+        props.addChatInit(contacts);
+        props.addChatList(chatList);
+        listChat.current = chatList;
+        listContact.current = contacts;
+      });
       getMyOrder();
 
       getProfil();
     } else {
-      
-      getContract()
+      getContract();
     }
     // const getNotif=async()=>{
     //   const notif= await Save.get("")
     // }
-  }, [props.wallet,isLogin]);
+  }, [props.wallet, isLogin]);
 
-  useEffect(()=>{
-    listChat.current=props.chatList;
-  },[props.chatList])
-  
-  useEffect(()=>{
-    if(props.socket){
-      
-      props.socket.on("msg-recieve",(data)=>{
+  useEffect(() => {
+    listChat.current = props.chatList;
+  }, [props.chatList]);
+
+  useEffect(() => {
+    if (props.socket) {
+      props.socket.on("msg-recieve", (data) => {
         const listOfChatContact = listChat.current;
-       
-        if(!(listOfChatContact.includes(data.room_id))){
-          
-            listChat.current= [data.room_id,...listChat.current]
-            const date = new Date()
-            const contact = {
-              id:data.room_id,
-              chats:[{
-                createdAt:date,
-                message:data.msg,
-                user_target:data.to
-              }],
-              createdAt:date,
-              updatedAt:date,
-              user_id:`${data.from},${data.to},`,
-              newChats:[{
-                createdAt:date,
-                message:data.msg,
-                user_target:data.to
-              }]
-            }
-            listContact.current[data.room_id]= contact;
-            props.addContact(data.room_id,contact)
-            props.addChat(data.room_id)
-            
-        }else{
-            console.log(listContact.current)
-            const date = new Date()
-            const contact_target = listContact.current[data.room_id];
-            contact_target.newChats.push({message:data.msg,user_target:data.to,updatedAt:date,createdAt:date});
-            contact_target.chats = [{updatedAt:date,createdAt:date,message:data.msg,user_target:data.to}]
-            listContact.current[data.room_id]= contact_target;
-            
-            props.addContact(data.room_id,contact_target)
-        }
-          
-      })
 
-      props.socket.on("msg-notif",(data)=>{
-        refOrderDetail.current= [...data.order,...refOrderDetail.current]
-        setorderDetail(refOrderDetail.current)
-      })
+        if (!listOfChatContact.includes(data.room_id)) {
+          listChat.current = [data.room_id, ...listChat.current];
+          const date = new Date();
+          const contact = {
+            id: data.room_id,
+            chats: [
+              {
+                createdAt: date,
+                message: data.msg,
+                user_target: data.to,
+              },
+            ],
+            createdAt: date,
+            updatedAt: date,
+            user_id: `${data.from},${data.to},`,
+            newChats: [
+              {
+                createdAt: date,
+                message: data.msg,
+                user_target: data.to,
+              },
+            ],
+          };
+          listContact.current[data.room_id] = contact;
+          props.addContact(data.room_id, contact);
+          props.addChat(data.room_id);
+        } else {
+          console.log(listContact.current);
+          const date = new Date();
+          const contact_target = listContact.current[data.room_id];
+          contact_target.newChats.push({
+            message: data.msg,
+            user_target: data.to,
+            updatedAt: date,
+            createdAt: date,
+          });
+          contact_target.chats = [
+            {
+              updatedAt: date,
+              createdAt: date,
+              message: data.msg,
+              user_target: data.to,
+            },
+          ];
+          listContact.current[data.room_id] = contact_target;
+
+          props.addContact(data.room_id, contact_target);
+        }
+      });
+
+      props.socket.on("msg-notif", (data) => {
+        refOrderDetail.current = [...data.order, ...refOrderDetail.current];
+        setorderDetail(refOrderDetail.current);
+      });
     }
-   
-  },[props.socket])
- 
+  }, [props.socket]);
+
   const goTo = (url) => {
     //console.log("click url", url);
     navigate(url);
@@ -224,23 +226,24 @@ function Header(props) {
       );
     });
   };
-  const loadNotifLength = ()=>{
+  const loadNotifLength = () => {
     let sizeNotif = 0;
-    
-    orderDetail.forEach((val,index)=>{
-      sizeNotif += val.readStatus && val.readStatus.search(props.wallet)>=0 ? 0 : 1;
-    })
+
+    orderDetail.forEach((val, index) => {
+      sizeNotif +=
+        val.readStatus && val.readStatus.search(props.wallet) >= 0 ? 0 : 1;
+    });
     return sizeNotif;
-  }
-  const loadNewChatsLength = ()=>{
-    let counts=0;
-    props.chatList.map((chatID,index)=>{
-        const contact = props.chatContact[chatID];
-        counts += contact.newChats.length
-    })
+  };
+  const loadNewChatsLength = () => {
+    let counts = 0;
+    props.chatList.map((chatID, index) => {
+      const contact = props.chatContact[chatID];
+      counts += contact.newChats.length;
+    });
     return counts;
-  }
-  
+  };
+
   return (
     <div>
       <nav className="top-app-bar navbar navbar-expand navbar-dark bg-dark">
@@ -279,7 +282,10 @@ function Header(props) {
                 aria-expanded="false"
               >
               </button> */}
-              <Link className="btn btn-lg btn-icon mx-2 btn-overlay d-none d-md-block" to="/chat">
+              <Link
+                className="btn btn-lg btn-icon mx-2 btn-overlay d-none d-md-block"
+                to="/chat"
+              >
                 <i className="material-icons">sms</i>
                 <span>{loadNewChatsLength()}</span>
               </Link>
@@ -310,11 +316,13 @@ function Header(props) {
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
-              <Link className="btn btn-lg btn-icon mx-2 btn-overlay d-none d-md-block" to="/cart">
+              <Link
+                className="btn btn-lg btn-icon mx-2 btn-overlay d-none d-md-block"
+                to="/cart"
+              >
                 <i className="material-icons">shopping_cart</i>
                 <span>{props.cart.length}</span>
               </Link>
-            
 
               <div className="dropdown">
                 <button
@@ -396,7 +404,7 @@ function Header(props) {
                                 accountBalance.toString()
                               );
                               props.updateBalance(balance);
-                              setisLogin(true)
+                              setisLogin(true);
                             })
                             .catch((err) => {});
                         }}
@@ -443,9 +451,15 @@ function Header(props) {
                 {/* <!-- Drawer link (Messages)--> */}
                 <Link className="nav-link d-md-none" to="/cart">
                   <div className="nav-link-icon">
-                  <i className="material-icons">shopping_cart</i>
+                    <i className="material-icons">shopping_cart</i>
                   </div>
                   Cart
+                </Link>
+                <Link className="nav-link d-md-none" to="/chat">
+                  <div className="nav-link-icon">
+                    <i className="material-icons">sms</i>
+                  </div>
+                  Chats
                 </Link>
                 {/* <!-- Divider--> */}
                 <div className="drawer-menu-divider d-sm-none"></div>
@@ -586,7 +600,10 @@ function Header(props) {
           <div className="backdrop-bg"></div>
           <div className="backdrop-content position-relative flex-column justify-content-center align-items-center">
             <Spinner animation="grow" variant="primary" />
-            <div className="text-white fw-bold" id="loaderText"> Please Wait....</div>
+            <div className="text-white fw-bold" id="loaderText">
+              {" "}
+              Please Wait....
+            </div>
           </div>
         </div>
       </div>
@@ -601,10 +618,10 @@ const mapToProps = (state) => {
     provider: state.ContractReducers.contract.provider,
     contract: state.ContractReducers.contract.myContract,
     cart: state.CartReducers,
-    socket:state.SocketReducers,
+    socket: state.SocketReducers,
     notif: state.NotifReducers,
-    chatList : state.ChatListReducers,
-    chatContact : state.ChatReducers
+    chatList: state.ChatListReducers,
+    chatContact: state.ChatReducers,
   };
 };
 const dispatchToProps = (dispatch) => {
@@ -624,21 +641,21 @@ const dispatchToProps = (dispatch) => {
     updateBalance: (price) => {
       dispatch({ type: "balance", price });
     },
-    addSocket : (socket)=>{
-      dispatch({type:"socket",socket})
+    addSocket: (socket) => {
+      dispatch({ type: "socket", socket });
     },
-    addChatList: (chatID)=>{
-      dispatch({type:"chatInit",keys:chatID})
+    addChatList: (chatID) => {
+      dispatch({ type: "chatInit", keys: chatID });
     },
-    addChat : (chatID)=>{
-      dispatch({type:"addChat",key:chatID})
+    addChat: (chatID) => {
+      dispatch({ type: "addChat", key: chatID });
     },
-    addChatInit : (data)=>{
-      dispatch({type:"contact",data})
+    addChatInit: (data) => {
+      dispatch({ type: "contact", data });
     },
-    addContact : (chatID,contact)=>{
-      dispatch({type:"addContact",key:chatID,contact})
-    }
+    addContact: (chatID, contact) => {
+      dispatch({ type: "addContact", key: chatID, contact });
+    },
   };
 };
 export default connect(mapToProps, dispatchToProps)(Header);

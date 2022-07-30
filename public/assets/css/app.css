@@ -425,7 +425,7 @@ div.skeleton-text:last-of-type {
 
 .chat-container {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -440,23 +440,27 @@ div.skeleton-text:last-of-type {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #131324;
 }
 
 .chat-container .container {
   height: 85vh;
-  width: 85vw;
-  background-color: #00000076;
+  width: 95%;
+  border-radius: 10px;
+  -webkit-box-shadow: 3px 5px 10px #414141;
+          box-shadow: 3px 5px 10px #414141;
+  background-color: black;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 25% 75%;
-      grid-template-columns: 25% 75%;
+  -ms-grid-columns: 35% 65%;
+      grid-template-columns: 35% 65%;
 }
 
-@media screen and (min-width: 720px) and (max-width: 1080px) {
+@media screen and (max-width: 900px) {
   .chat-container .container {
-    -ms-grid-columns: 35% 65%;
-        grid-template-columns: 35% 65%;
+    -ms-grid-rows: 25% 75%;
+        grid-template-rows: 25% 75%;
+    -ms-grid-columns: 100%;
+        grid-template-columns: 100%;
   }
 }
 
@@ -467,6 +471,16 @@ div.skeleton-text:last-of-type {
       grid-template-rows: 10% 75% 15%;
   overflow: hidden;
   background-color: #080420;
+}
+
+@media screen and (max-width: 900px) {
+  .contact-container {
+    -ms-grid-rows: 100%;
+        grid-template-rows: 100%;
+    -ms-grid-columns: 100%;
+        grid-template-columns: 100%;
+    overflow-x: scroll;
+  }
 }
 
 .contact-container .brand {
@@ -489,6 +503,12 @@ div.skeleton-text:last-of-type {
 .contact-container .brand h3 {
   color: white;
   text-transform: uppercase;
+}
+
+@media screen and (max-width: 900px) {
+  .contact-container .brand {
+    display: none;
+  }
 }
 
 .contact-container .contacts {
@@ -516,6 +536,15 @@ div.skeleton-text:last-of-type {
   border-radius: 1rem;
 }
 
+@media screen and (max-width: 900px) {
+  .contact-container .contacts {
+    -webkit-box-orient: horizontal !important;
+    -webkit-box-direction: normal !important;
+        -ms-flex-direction: row !important;
+            flex-direction: row !important;
+  }
+}
+
 .contact-container .contacts .contact {
   background-color: #ffffff34;
   min-height: 5rem;
@@ -534,8 +563,42 @@ div.skeleton-text:last-of-type {
   transition: 0.5s ease-in-out;
 }
 
+@media screen and (max-width: 900px) {
+  .contact-container .contacts .contact {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    min-width: 150px;
+    width: auto;
+    background-color: transparent !important;
+  }
+}
+
 .contact-container .contacts .contact .avatar img {
   height: 3rem;
+}
+
+@media screen and (max-width: 900px) {
+  .contact-container .contacts .contact .avatar {
+    background-color: yellow;
+    border-radius: 50px;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .contact-container .contacts .contact .username div {
+    -webkit-box-pack: center !important;
+        -ms-flex-pack: center !important;
+            justify-content: center !important;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .contact-container .contacts .contact .username div.info-chat {
+    display: none !important;
+  }
 }
 
 .contact-container .contacts .contact .username h3 {
